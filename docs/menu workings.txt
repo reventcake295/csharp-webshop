@@ -1,0 +1,178 @@
+: root (no user)
+    view product catalog.
+        ...products.
+            back.
+        back.
+    login. -> success: root:customer|administrator, fail: return root:no user
+    change language.
+    exit.
+
+: root (customer)
+    view product catalog.
+        ...products.
+            add to shopping cart.
+            back.
+        back.
+    view shopping cart.
+        ...products.
+            remove from shopping cart.
+            back.
+        create order
+        back.
+    view orders.
+        ...orders(num. total, orderStatus, productCount, orderTime)
+            back.
+        back.
+    logout.
+    change language.
+    exit.
+
+: root (administrator)
+    view product catalog.
+        ...products.
+            edit product
+            remove product
+            back.
+        add product
+        back.
+    view incoming orders.
+        ...orders (num. orderId, username, total, productCount, orderTime)
+            accept order.
+            reject order.
+            back.
+        back.
+    logout.
+    change language.
+    exit.
+
+combined
+: root
+    view product catalog
+        ...products
+            add to shopping cart.[CUSTOMER]
+            edit product[ADMIN]
+            remove product[ADMIN]
+            back
+        add product[ADMIN]
+        back
+    view shopping cart.[CUSTOMER]
+        ...products.
+            remove from shopping cart.
+            back.
+        create order
+        back.
+    orders[CUSTOMER|ADMIN]
+        ...orders[status:incoming] (num. orderId, username, total, productCount, orderTime)[ADMIN]
+            accept order.
+            reject order.
+            back.
+        ...orders[user:userId] (num. orderId, orderStatus, total, productCount, orderTime)[CUSTOMER]
+            back.
+        back
+    login. -> success: root:CUSTOMER|ADMIN, fail: return root:no user | logout[CUSTOMER|ADMIN]
+    users[ADMIN]
+        ...users
+            change permission
+            remove user!!!
+            back
+        add user
+        back
+    change language.
+    exit
+
+class structure:
+
+abstract AUiItem
+    Dictionary<string, AUiItem>? _subMenu;
+    AUiItem*() {
+        _subMenu.Add(1, new AUiItem*())
+                .Add(2, new AUiItem*())
+                ...
+    }
+    DisplayMenu() {
+        _subMenu == null => NotImplementedException;
+        Ui.DisplayMenu(_subMenu)
+    }
+    DisplayItem(string accessOption) {
+        Accessible()
+            false => return;
+            true => UiHelper.DisplayOption(accessOption, "ID")
+    }
+    virtual Accessible() {
+        return true;
+    }
+    Execute()
+
+Ui
+    Dictionary<string, AUiItem> _menuMap;
+    static Bool _shutdown = false;
+    Ui() {
+        _menuMap.Add(1, new AUiItem*())
+                .Add(2, new AUiItem*())
+                ...
+    }
+    Run() {
+        while (!_shutdown) DisplayMenu(_menuMap)
+    }
+    static Shutdown() {
+        _shutdown = true
+    }
+
+static UiHelper
+    static AskQuestion(string questionId, string[] options)
+    static AskQuestion(string questionId, int[] options)
+    static AskQuestion(string questionId, string? default)
+    static DisplayOption(string optionKey, string optionId)
+    static DisplayMenu(Dictionary<string, AUiItem> menu) {
+       foreach (menu (key value)) value.DisplayItem(key)
+   }
+
+Lang
+    Lang()
+    Dictionary<string, LangCollection> _langMap;
+
+    @throws nullException
+    GetLangString(string id) {
+        _langMap(id).GetString()
+    }
+
+    @throws nullException
+    GetLangGroupString(string id, StringType type) {
+        _langMap(id).GetGroupString(type)
+    }
+    _matchStringType(string name) {
+
+    }
+
+    LangCollection {
+        LangCollection(string[] collection)
+
+        String? _langString;
+        GetString() {
+            _langString == null => throw nullException
+            return _langString
+        }
+
+        Dictionary<StringType, String>? _stringGroup;
+        GetGroupString(StringType type) {
+            _stringGroup == null => throw nullException
+            _stringGroup(type) {
+                null => throw nullException
+                match => return string
+            }
+        }
+    }
+    public StringType {
+        Header,
+        Question,
+        QuestionEmpty,
+        QuestionMaxLoop,
+        QuestionWrong,
+        ResultSuccess,
+        ResultNoMatch,
+        ResultFail
+    }
+
+static StateHolder {
+    Product StateHolder
+}

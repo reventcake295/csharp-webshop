@@ -1,0 +1,30 @@
+The UI classes must be capable of handling the following things:
+
+display menu
+
+ask user input for menu action
+
+receive user menu action input
+
+trigger action based on menu action input
+
+ask user input and receive answer
+
+
+Base Ui
+
+UiHelper
+- display questions and receive answers
+- AskQuestion(id, out result):bool
+
+
+Lang handling
+Lang
+- lookupMap get; priv set;
+- GetString(str str, Dictionary<string, string> replacement): str
+
+- ChangeLang(str newLang): bool
+
+
+
+

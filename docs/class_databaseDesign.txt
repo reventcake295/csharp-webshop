@@ -1,0 +1,141 @@
+View:
+Product catalog:
+- list Product[]: Products.List()
+  - add product to shopping cart: ShoppingCart.AddProduct(int id)
+  - ADMIN: edit product: Products.edit(int id)
+  - ADMIN: remove product: Products.Remove(int id)
+- ADMIN: Add product: Products.Add()
+
+Shopping cart:
+- See shopping cart: ShoppingCart.List()
+- remove an product shopping cart: ShoppingCart.RemoveProduct(int id)
+- create order from shopping cart: ShoppingCart.CreateOrder()
+
+Orders:
+- Customer: See own orders: Orders.ListUserOrders(int id)
+- ADMIN: See incoming orders: Orders.ListIncomingOrders()
+- ADMIN: Complete incoming order: Orders.UpdateStatus(int id, status = COMPLETE)
+- ADMIN: Reject incoming order: Orders.UpdateStatus(int id, status = Rejected)
+
+Classes/tables
+ShoppingCart: Class
+# Property's
++ OrderProduct[]
++ money_id -> money.money_id
++ total
+# Multi
+- List(): List the products for the user to see
+- CreateOrder(): create order form shopping cart, and empty shopping cart
+# Single
+- AddProduct(int id): add product
+- RemoveProduct(int id): remove product
+
+Orders: Class[], SqlBuilder -> table
+# Property's
++ order_id
++ user_id -> users.user_id
++ order_date
++ OrderProduct[](Only in the class not Schema)
++ status_id -> Status.status_id
+# Multi
+- ListUserOrders(int id): See user order
+- ListIncomingOrders(): see incoming orders
+- LoadData()
+# Single
+- UpdateStatus(int id, status = COMPLETE): complete incoming order
+- UpdateStatus(int id, status = Rejected): Reject incoming order
+- LoadData(int)
+- ListOrder(int id): Display a order
+
+orderProducts: Class : Product -> table
+# Property's
++ order_product_id
++ order_id -> Orders.order_id
++ count
+
+inherit:
++ product_id -> Products.product_id
+{Product:product_id:name, description}
++ taxes_id -> Taxes.taxes_id
+{Taxes:taxes_id}
++ pcsPrice
++ total
+# Multi
+# Single
++ override remove()
+inherit
+
+Product: Class[], SqlBuilder -> table
+# Property's
++ products_id PRIMARY
++ money_id -> Money.money_id
+{Money:money_id}
++ taxes_id -> Taxes.taxes_id
+{Taxes:taxes_id}
++ name
++ description
++ price
+
+# Multi
+- Add()
+- List()
+# Single
+- Edit(int id)
+- Remove(int id)
+- Display(int id)
+
+Taxes: table
+# Property's
++ taxes_id
++ name
++ percent
+# Multi
+# Single
+
+Money: table
+# Property's
++ money_id
++ displayFormat
++ name
+# Multi
+# Single
+
+User: Class, SqlBuilder [Singleton] -> table
+# Property's
++ private int _userId
++ public string Username
++ private int _authLevelId -> auth.auth_id
+{Auth:authLevel_id}
++ PermissionRank -> auth.permission
+- Private static User instance
+#functions
+- public static GetInstance()
+- public static UserLogin()
+- private bool LoadUser()
+
+Auth: table
+- auth_id
+- name
+- permission
+
+internal SqlBuilder:
+# Property's
+# functions
+- protected startStmt(string stmt): begin a new statement
+- protected AddArg(string variable, string value): add a string argument
+- protected AddArg(string variable, int value): add a int argument
+- protected void ExecCmdAsync(): execute a Command, with no expectations of a return
+- protected Task<MySqlDataReader> ExecStmtAsync(): execute a statement, and return the result
+- protected void virtual loadData(): load the data for this class from the corrosponding table
+- protected void virtual loadData(int id): load the data for this class from the corrosponding table, with a specific id
+
+internal DatabaseConn: [Singleton] (Note: this is subject to change depending on wheter this succeeds or not)
+# Property's
+- private MySqlConnection dbConn
+- private static DatabaseConn instance
+# functions
+- private CreateConnection()
+- internal static GetInstance()
+- private DatabaseConn(): create the instance and the conenction to the database
+- public Task<int> ExecuteCommandAsync(MysqlCommand stmt): Execute the command returns the number of rows affected eventually via the Task
+- public Task<MySqlDataReader> ExecuteQueryAsync(MysqlCommand stmt): Execute the query and return the result when done via the Task

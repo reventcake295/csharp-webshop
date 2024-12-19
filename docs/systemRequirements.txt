@@ -1,0 +1,53 @@
+Inteface:
+• As a user, I want to interact with the store through a command line interface.
+
+Product catalog:
+User:
+- See catalog
+Customer : user
+- Add product from catalog too Shopping cart
+Administrator : user
+- Add product to catalog
+- Edit product in catalog
+- Delete product in catalog
+
+Single item:
+• As an administrator, I want to add a product to my product catalog.
+• As an administrator, I want to edit a product in my product catalog.
+• As an administrator, I want to delete a product in my product catalog.
+• As a customer, I want to be able to add a product from the catalog to my
+shopping cart.
+All/Multi item:
+• As a user, I want to see the entire product catalog.
+
+
+Shopping cart
+Customer:
+- see shopping cart
+- remove product from shopping cart
+- create order based on shopping cart
+
+Single item
+• As a customer, I want to be able to remove a product from my shopping cart.
+All items:
+• As a customer, I want to see all the items currently in my shopping cart.
+• As a customer, I want to be able to place an order containing all the items in my
+shopping cart.
+• As a customer, I want my shopping cart to be empty when my order is
+successfully placed.
+
+Orders:
+Customer
+- See status of own order(s)
+Administrator
+- See incoming orders
+- Complete incoming order
+- Reject incoming order
+
+• As an administrator, I want to see all incoming orders.
+• As an administrator, I want to complete an incoming order.
+• As an administrator, I want to reject an incoming order.
+• As a customer, I want to see the status of my order.
+
+
+
