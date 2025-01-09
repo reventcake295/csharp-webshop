@@ -47,7 +47,7 @@
 
 combined
 : root
-    view product catalog
+    1. view product catalog
         ...products
             add to shopping cart.[CUSTOMER]
             edit product[ADMIN]
@@ -55,13 +55,13 @@ combined
             back
         add product[ADMIN]
         back
-    view shopping cart.[CUSTOMER]
+    2. view shopping cart.[CUSTOMER]
         ...products.
             remove from shopping cart.
             back.
         create order
         back.
-    orders[CUSTOMER|ADMIN]
+    3. orders[CUSTOMER|ADMIN]
         ...orders[status:incoming] (num. orderId, username, total, productCount, orderTime)[ADMIN]
             accept order.
             reject order.
@@ -69,16 +69,16 @@ combined
         ...orders[user:userId] (num. orderId, orderStatus, total, productCount, orderTime)[CUSTOMER]
             back.
         back
-    login. -> success: root:CUSTOMER|ADMIN, fail: return root:no user | logout[CUSTOMER|ADMIN]
-    users[ADMIN]
+    5. users[ADMIN]
         ...users
             change permission
             remove user!!!
             back
         add user
         back
-    change language.
-    exit
+    7. login. -> success: root:CUSTOMER|ADMIN, fail: return root:no user | logout[CUSTOMER|ADMIN]
+    8. change language.
+    9. exit
 
 class structure:
 
@@ -176,3 +176,57 @@ Lang
 static StateHolder {
     Product StateHolder
 }
+
+
+/Orders.cs(36,21): warning CS8618: 
+Non-nullable property 'DisplayFormat' must contain a non-null value when exiting constructor. Consider declaring the property as nullable. 
+
+
+/Products.cs(5,24): warning CS8618: 
+Non-nullable property 'ProductListing' must contain a non-null value when exiting constructor. Consider declaring the property as nullable. 
+
+/Products.cs(30,21): warning CS8618: 
+Non-nullable property 'MoneyFormat' must contain a non-null value when exiting constructor. Consider declaring the property as nullable. 
+
+/Products.cs(32,21): warning CS8618: 
+Non-nullable property 'MoneyName' must contain a non-null value when exiting constructor. Consider declaring the property as nullable. 
+
+/Products.cs(36,21): warning CS8618: 
+Non-nullable property 'TaxesName' must contain a non-null value when exiting constructor. Consider declaring the property as nullable. 
+
+/Products.cs(40,21): warning CS8618: 
+Non-nullable property 'ProductName' must contain a non-null value when exiting constructor. Consider declaring the property as nullable. 
+
+/Products.cs(42,21): warning CS8618: 
+Non-nullable property 'ProductDescription' must contain a non-null value when exiting constructor. Consider declaring the property as nullable. 
+
+
+/User.cs(36,13): warning CS8618: 
+Non-nullable property 'Username' must contain a non-null value when exiting constructor. Consider declaring the property as nullable. 
+
+/User.cs(36,13): warning CS8618: 
+Non-nullable property 'Password' must contain a non-null value when exiting constructor. Consider declaring the property as nullable. 
+
+
+/ShoppingCart.cs(5,29): warning CS8618: 
+Non-nullable property 'OrderProducts' must contain a non-null value when exiting constructor. Consider declaring the property as nullable. 
+
+/ShoppingCart.cs(9,21): warning CS8618: 
+Non-nullable property 'DisplayFormat' must contain a non-null value when exiting constructor. Consider declaring the property as nullable. 
+
+
+/Ui/UiItem.cs(10,21): warning CS8618: 
+Non-nullable property 'NameId' must contain a non-null value when exiting constructor. Consider declaring the property as nullable. 
+
+
+/Ui/Lang.cs(17,46): warning CS8600: 
+Converting null literal or possible null value to non-nullable type. 
+
+/Ui/Lang.cs(22,46): warning CS8600: 
+Converting null literal or possible null value to non-nullable type. 
+
+/Ui/Lang.cs(42,25): warning CS0649: 
+Field 'Lang.LangCollection._langString' is never assigned to, and will always have its default value null 
+
+/Ui/Lang.cs(52,20): warning CS8602: 
+Dereference of a possibly null reference.

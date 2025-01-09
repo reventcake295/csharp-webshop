@@ -1,0 +1,122 @@
+{
+  "en_us": {
+    "programLoading": "The store is loading.",
+    "programLoaded": "The store has been loaded",
+    "Menu_back_option": "Back",
+    "Menu_Users_option": "Users",
+    "Menu_UserChangePerm_option": "Change permission",
+    "Menu_User_option": "User",
+    "Menu_RemUser_option": "Remove user",
+    "menu_RemProd_option": "Remove product",
+    "Menu_Orders_option": "Orders",
+    "Menu_OrderReject_option": "Reject order",
+    "Menu_OrderAccept_option": "Accept order",
+    "Menu_Order_option": "Order",
+    "Menu_Logout_option": "Logout",
+    "Menu_Login_option": "Login",
+    "Menu_exit_option": "Exit",
+    "Menu_EditProd_option": "Edit product",
+    "Menu_ChangeUser_option": "Edit user",
+    "Menu_ChangeLang_option": "Change language",
+    "Menu_catalogProd_option": "Catalog Product",
+    "Menu_Catalog_option": "Catalog",
+    "Menu_CartRem_option": "Remove from cart",
+    "Menu_cartProd_option": "Cart product",
+    "Menu_CartOrder_option": "Create order from cart",
+    "Menu_Cart_option": "Cart",
+    "Menu_AddUser_option": "Create user",
+    "Menu_AddProd_option": "Create product",
+    "Menu_AddCartProd_option": "Add product to cart",
+    "userAdd_emptyAny": "You did not fill in one of the required fields, returning to previous menu.",
+    "userAdd_permissionCastFailed": "Could not resolve given permission type, returning to previous menu",
+    "userAdd_header": "Please fill in the following prompt for the user information:",
+    "login_header": "Username and password required for login.",
+    "default": {
+      "Header": "What would you like to do?",
+      "Question": "Choose one of the above",
+      "QuestionMaxLoop": "You have too many attempts for this input returning to the previous menu.",
+      "QuestionEmpty": "Please fill in one of the options.",
+      "QuestionWrong": "That was not an valid answer, please try again."
+    },
+    "login_username": {
+      "Question": "Username",
+      "QuestionEmpty": "Please fill in your username",
+      "ResultSuccess": "Successfully logged-in!",
+      "ResultFailure": "Username and/or password wrong, returning to main menu"
+    },
+    "login_password": {
+      "Question": "Password",
+      "QuestionEmpty": "Please fill in your password",
+      "ResultSuccess": "Successfully logged-in!",
+      "ResultFailure": "Username and/or password wrong, returning to main menu"
+    },
+    "logout": {
+      "ResultSuccess": "Successfully logged-out!",
+      "ResultFailure": "Could not logout, please try again later."
+    },
+    "usersMenu": {
+      "Header": "These are the current users present in the system:",
+      "Question": "Please select one of the users"
+    },
+    "user_info_header": "Info of the selected user:",
+    "user_info_name": "Username",
+    "user_info_email": "Email",
+    "user_info_perm": "Permission rank",
+    "user_info_address": "Adress",
+    "userAdd_user": {
+      "Question": "Username",
+      "QuestionEmpty": "Please fill in a username.",
+      "ResultFailure": "Something went wrong while adding the user to the database, try again later, returning to the previous menu",
+      "ResultSuccess": "User has successfully been added to the database!",
+      "QuestionWrong": "A user with this name already exits, returning to the previous menu."
+    },
+    "userAdd_password": {
+      "Question": "Password",
+      "QuestionEmpty": "Please fill in a password."
+    },
+    "userAdd_permission": {
+      "Question": "Permission rank('Customer', 'Admin')",
+      "QuestionEmpty": "Please fill in one of the options.",
+      "QuestionWrong": "Could not process the input into the correct type, please try again."
+    },
+    "userAdd_addressStreet": {
+      "Question": "Street name",
+      "QuestionEmpty": "Please fill in a street name."
+    },
+    "userAdd_addressNumber": {
+      "Question": "House number",
+      "QuestionEmpty": "Please fill in a house number.",
+      "QuestionWrong": "Could not turn the input into a number, the house number addition is separate, please try again."
+    },
+    "userAdd_addressAdd": {
+      "Question": "House number addition"
+    },
+    "userAdd_addressPostal": {
+      "Question": "Postal code(6 characters)",
+      "QuestionEmpty": "Please fill fill in a potstal code.",
+      "QuestionWrong": "The Postalcode is not accepted, please note that it is exactly 6 characters long, please try again."
+    },
+    "userAdd_addressCity": {
+      "Question": "City name",
+      "QuestionEmpty": "Please fill in a City name."
+    },
+    "userAdd_email": {
+      "Question": "Email",
+      "QuestionEmpty": "Please fill in an email."
+    },
+    "userRem": {
+      "Question": "Are you sure you wish to delete this account? (Y/N)",
+      "ResultFailure": "Canceling deletion process, and returning to the previous menu.",
+      "ResultSuccess": "User has successfully removed, returning to the Users menu."
+    },
+    "userRem_noUserSelected": "Could not begin the process of deletion because there is no user selected. Returning to previous menu.",
+    "userRem_userIncomingOrders": "The user you are trying to delete has still incoming orders present, are you sure you will wish to delete this user?",
+    "userRem_CouldNotRemoveUser": "Could not delete the user, please try again later, returning to the previous menu.",
+    "userChange_header": "You can update the following information of a user, note that leaving the information empty will assume that the current value is to be used.",
+    "userChange_noUserSelected": "Could not begin the process of editing because there is no user selected. Returning to previous menu.",
+    "userChange_success": "Successfully updated the user!",
+    "userChange_fail0": "Could not update the user please try again later.",
+    "userChange_noChange": "No change in the information of the user provided, returning to the previous menu.",
+    "userChange_permCurrentUser": "You are currently editing the information of your own account so skipping Permission setting."
+  }
+}

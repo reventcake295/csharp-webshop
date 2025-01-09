@@ -32,15 +32,13 @@
     ```
 - check if user exist with username, then return the required information for processing
   - ```sql
-    SELECT count(*) AS userCount, password, user_id, Auth.permission, Auth.nameId FROM users
-    JOIN Auth ON Auth.auth_id = users.auth_id
+    SELECT count(*) AS userCount, password, user_id, auth_id FROM users
     WHERE username=@username;
     ```
 - load all users
   - ```sql
-    SELECT user_id, username, Auth.permission, Auth.nameId, email, adres_street, adres_number, adres_add, adres_postal, adres_city, Auth.auth_id
-    FROM users
-    JOIN Auth ON Auth.auth_id = users.auth_id;
+    SELECT user_id, username, email, adres_street, adres_number, adres_add, adres_postal, adres_city, auth_id
+    FROM users;
     ```
 - load the taxes data
   - ```sql
@@ -49,10 +47,6 @@
 - load the money data
   - ```sql
     SELECT * FROM Money;
-    ```
-- load auth data
-  - ```sql
-    SELECT * FROM Auth;
     ```
 ### user requirements:
 - As a user, I want to see the entire product catalog.
@@ -65,7 +59,7 @@
 - As a customer, I want to see the status of my order.
   - general overview of orders of user:
     ```sql
-    SELECT O.statusId, O.order_date, O.orderTotal, M.displayFormat 
+    SELECT O.order_id, O.statusId, O.order_date, O.orderTotal, M.displayFormat 
     FROM Orders O
     JOIN Money M ON M.money_id = O.money_id
     WHERE O.user_id=@userId;
@@ -142,21 +136,6 @@
 - remove a money type
   - ```sql
     DELETE FROM Money WHERE money_id = @moneyId;
-    ```
-- add an auth type 
-  - ```sql
-    INSERT INTO Auth (nameId, permission) 
-    VALUES (@authNameId, @authPermission);
-    ```
-- update an auth type
-  - ```sql
-    UPDATE Auth 
-    SET nameId=@authNameId, permission = @authPermission
-    WHERE auth_id = @authId;
-    ```
-- remove an auth type
-  - ```sql
-    DELETE FROM Auth WHERE auth_id = @authId;
     ```
 ### User requirements:
 - As an administrator, I want to add a product to my product catalog.
