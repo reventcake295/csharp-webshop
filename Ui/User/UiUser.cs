@@ -35,7 +35,7 @@ internal class UiUser : UiItem
         Console.WriteLine($"{_user.AdresStreet} {_user.AdresNumber}{_user.AdresAdd}");
         Console.WriteLine($"{_user.AdresPostal} {_user.AdresCity}");
         Console.WriteLine();
-        DisplayMenu("userMenu");
+        DisplayMenu();
         // the funny thing about the way this is implemented
         // is that this can be done without a problem because everything that can happen with a selected user happens via the displayed menu referenced above
         StateHolder.CurrentUser = null;

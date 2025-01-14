@@ -9,15 +9,19 @@ internal class Settings : SqlBuilder
 
     [Mapping(ColumnName = "AvailableLangs")] internal static List<string> AvailableLangs { get; private set; } = [ "en" ];
 
+    internal static Money DefaultMoney { get; private set; } = new();
+    internal static Taxes DefaultTaxes { get; private set; } = new();
+    
     static Settings()
     {
-        // this is required to get the process completely loaded but once it is loaded it is no longer needed
+        // this is required to get the process completely loaded, but once it is loaded, it is no longer necessary
         new Settings().LoadData();
     }
 
+
     protected override void LoadData()
     {
-        StartStmt("SELECT DefaultLang, AvailableLangs, MaxInputLoop FROM capstoneStore.Settings;");
+        StartStmt("SELECT DefaultLang, AvailableLangs, MaxInputLoop, DefaultMoney, DefaultTaxes FROM capstoneStore.Settings;");
         Task<MySqlDataReader> settingsLoad = ExecQueryAsync();
         settingsLoad.Wait();
         if (settingsLoad.Result == null) throw new FileLoadException("Failed to load settings");
@@ -26,6 +30,8 @@ internal class Settings : SqlBuilder
         Lang = settings.GetString("DefaultLang");
         MaxInputLoop = settings.GetInt32("MaxInputLoop");
         AvailableLangs = settings.GetString("AvailableLangs").Split(',').ToList();
+        DefaultMoney = Money.MoneyTypes[settings.GetInt32("DefaultMoney")];
+        DefaultTaxes = Taxes.TaxTypes[settings.GetInt32("DefaultTaxes")];
         settings.CloseAsync();
     }
 }

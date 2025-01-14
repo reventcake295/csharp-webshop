@@ -2,7 +2,6 @@ using System.Data;
 using System.Security;
 using System.Security.Authentication;
 using MySqlConnector;
-using Store.Ui;
 
 namespace Store;
 
@@ -12,9 +11,11 @@ namespace Store;
 internal class User : SqlBuilder
 {
     [Mapping(ColumnName = "user_id")]
-    public int Id { get; private set; }
+    public int Id { get; private set; } // this may say that it is unused,
+                                        // but it is by the SqlHelper Class mapper
+                                        // for assigning the id from the database
     [Mapping(ColumnName = "username")]
-    public string Username { get; private set; }
+    public string Username { get; private set; } = string.Empty;
     
     private int _authLevelId;
     [Mapping(ColumnName = "auth_id")]
@@ -30,27 +31,21 @@ internal class User : SqlBuilder
     public Perm PermissionRank { get; private set; }
     
     [Mapping(ColumnName = "adres_street")]
-    public string AdresStreet { get; private set; }
+    public string AdresStreet { get; private set; } = string.Empty;
     
     [Mapping(ColumnName = "adres_number")]
     public int AdresNumber { get; private set; }
     
     [Mapping(ColumnName = "adres_add")]
-    public string AdresAdd { get; private set; }
+    public string AdresAdd { get; private set; } = string.Empty;
     
     [Mapping(ColumnName = "adres_postal")]
-    public string AdresPostal { get; private set; }
+    public string AdresPostal { get; private set; } = string.Empty;
     
     [Mapping(ColumnName = "adres_city")]
-    public string AdresCity { get; private set; }
-    
-    [Mapping(ColumnName = "email")]
-    public string Email { get; private set; }
+    public string AdresCity { get; private set; } = string.Empty;
 
-    protected override void LoadData(int id)
-    {
-        throw new NotImplementedException("LoadData, not implemented comes later when building the user login handling");
-    }
+    [Mapping(ColumnName = "email")] public string Email { get; private set; } = string.Empty;
 
     internal bool EditUser(Perm permissionRank, string adresStreet, int adresNumber, string adresAdd, string adresPostal, string adresCity, string email)
     {
@@ -70,7 +65,7 @@ internal class User : SqlBuilder
         if (!(updateUser > 0)) return false;
         
         // update the fields in the instance too so it does not have to grab the whole list from the database again
-        _authLevelId = authId;
+        AuthLevelId = authId;
         AdresStreet = adresStreet;
         AdresNumber = adresNumber;
         AdresAdd = adresAdd;
@@ -149,7 +144,9 @@ internal class User : SqlBuilder
         
         User user = new();
         // insert the user into the database
-        // yes, I know that this line is long but if I wrap it to the next line, it will throw an error and otherwise not check the syntax of the SQL
+        // yes, I know that this line is long,
+        // but if I wrap it to the next line,
+        // it will throw an error and otherwise not check the syntax of the SQL
         user.StartStmt("INSERT INTO users (username, password, email, adres_street, adres_number, adres_add, adres_postal, adres_city, auth_id) VALUES (@username, @password, @email, @adresStreet, @adresNumber, @adresAdd, @adresPostal, @adresCity, @authId)");
         
         user.AddArg("@username", username);

@@ -54,8 +54,30 @@ internal static class UiHelper
                     "n" or "false" or "off" or "no" => "false",
                     _                               => response
                 };
-            
-            
+            // if it is a decimal, then ensure that when either a ',' or '.'
+            // are used as second or 3rd last place,
+            // then ensure that it is an actual decimal parsed that way
+            else if (typeof(T) == typeof(decimal))
+            {
+                // first transform all '.' to ',' to ensure that all instances that can cause problems are accounted for
+                response = response.Replace(".", ",");
+                // see if the string contains at least a ','
+                if (response.Contains(','))
+                {
+                    // split the string into its separate parts
+                    string[] responses = response.Split(',');
+                    // and then cast the string back into a whole in sequence
+                    string responseCat = "";
+                    // if the length of the array is more than two, then we need
+                    // to first combine the parts up to the second last one
+                    if (responses.Length > 2)
+                        for (int it = 0; it < (responses.Length - 1); it++)
+                            responseCat += responses[it];
+                    // and then add the last part after adding in a '.' because it is a decimal
+                    response = responseCat + '.' + responses[^1];
+                }
+            }
+
             // To convert the response string to the given type.
             // I would like to add the exception for string when it is one. However, I can't figure out how to do that without a lot of problems popping up,
             // because it doesn't recognize an if comparison as a valid check for it

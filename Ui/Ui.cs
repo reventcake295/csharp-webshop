@@ -14,7 +14,8 @@ internal class Ui
 
     internal Ui()
     {
-        // somehow the chaining of the .Add methods doesn't work so we do the adding in sequence and reference the map each time
+        // somehow the chaining of the .Add methods doesn't work,
+        // so we do the adding in sequence and reference the map each time
         _menuMap.Add("1", new UiCatalog());
         _menuMap.Add("2", new UiCart());
         _menuMap.Add("3", new UiOrders());

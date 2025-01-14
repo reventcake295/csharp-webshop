@@ -4,8 +4,10 @@ namespace Store.Ui.Cart;
 
 internal class UiCartProd : UiItem
 {
-    internal UiCartProd()
+    private readonly OrderProduct _orderProduct;
+    internal UiCartProd(OrderProduct orderProduct)
     {
+        _orderProduct = orderProduct;
         NameId = "Menu_cartProd_option";
         SubMenu.Add("1", new UiCartRem());
         SubMenu.Add("2", new UiBack());
@@ -17,7 +19,9 @@ internal class UiCartProd : UiItem
 
     internal override bool DisplayItem(string key)
     {
-        throw new NotImplementedException();
+        // ensure that the user may access this option
+        if (!Accessible()) return false;
+        UiHelper.DisplayCustomOption(key, $"{_orderProduct.ProductName} x{_orderProduct.Count} {_orderProduct.Count * _orderProduct.ProductPrice}");
         return true;
     }
 }

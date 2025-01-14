@@ -40,7 +40,7 @@ internal class DatabaseConn
 
     internal Task<int> ExecuteCommandAsync(MySqlCommand command)
     {
-        Task<int> result = _connection.OpenAsync().ContinueWith(task =>
+        Task<int> result = _connection.OpenAsync().ContinueWith(_ =>
         {
             command.Connection = _connection;
             Task<int> result1 = command.ExecuteNonQueryAsync().ContinueWith(task1 =>
@@ -55,7 +55,7 @@ internal class DatabaseConn
 
     internal Task<MySqlDataReader> ExecuteReaderAsync(MySqlCommand command)
     {
-        Task<Task<MySqlDataReader>> result = _connection.OpenAsync().ContinueWith(task =>
+        Task<Task<MySqlDataReader>> result = _connection.OpenAsync().ContinueWith(_ =>
         {
             command.Connection = _connection;
             Task<MySqlDataReader> result = command.ExecuteReaderAsync();

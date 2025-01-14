@@ -56,11 +56,10 @@ internal class UiAddUser : UiItem
             Console.WriteLine(Lang.GetLangGroupString("userAdd_user", Lang.StringType.ResultSuccess));
             
         }
-        catch (SecurityException e)
+        catch (SecurityException)
         { // we already checked this at the start, but since the AddUser has another one embedded into it, we catch if here and return 
-            return;
         }
-        catch (ConstraintException e)
+        catch (ConstraintException)
         { // the user already exits, although it is weird, it comes up here instead of at the beginning after the username was supplied
             Console.WriteLine(Lang.GetLangGroupString("userAdd_username", Lang.StringType.QuestionWrong));
         }

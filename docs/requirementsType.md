@@ -22,15 +22,15 @@
 
 ## Database -> Application
 ### system background workings:
-- retrive settings
+- retrieve settings
   - ```sql
     SELECT DefaultLang, AvailableLangs, MaxInputLoop FROM capstoneStore.Settings;
     ```
-- check if user exist by returning the number of rows that has a given username 
+- check if a user exists by returning the number of rows that has a given username 
   - ```sql
     SELECT count(*) AS userCount FROM users WHERE username=@username;
     ```
-- check if user exist with username, then return the required information for processing
+- check if a user exists with a username, then return the required information for processing
   - ```sql
     SELECT count(*) AS userCount, password, user_id, auth_id FROM users
     WHERE username=@username;
@@ -40,7 +40,7 @@
     SELECT user_id, username, email, adres_street, adres_number, adres_add, adres_postal, adres_city, auth_id
     FROM users;
     ```
-- load the taxes data
+- load the tax's data
   - ```sql
     SELECT * FROM Taxes;
     ```
@@ -57,14 +57,14 @@
     JOIN Money M ON M.money_id = P.money_id;
     ```
 - As a customer, I want to see the status of my order.
-  - general overview of orders of user:
+  - general overview of orders, of a specific user:
     ```sql
     SELECT O.order_id, O.statusId, O.order_date, O.orderTotal, M.displayFormat 
     FROM Orders O
     JOIN Money M ON M.money_id = O.money_id
     WHERE O.user_id=@userId;
     ```
-    specific order select:
+    specific order selects:
     ```sql
     SELECT P.name, P.description, oP.pcsPrice, oP.count, oP.total, M.name, M.displayFormat, T.name, T.percent, P.money_id, P.taxes_id 
     FROM orderProducts oP 
@@ -81,7 +81,7 @@
     JOIN Money M ON M.money_id = O.money_id
     WHERE O.statusId=@statusId;
     ```
-    specific order select:
+    specific order selects:
     ```sql
     SELECT P.name, P.description, oP.pcsPrice, oP.count, oP.total, M.name, M.displayFormat, T.name, T.percent, P.money_id, P.taxes_id 
     FROM orderProducts oP 
@@ -112,13 +112,13 @@
     INSERT INTO Taxes (name, percent) 
     VALUES (@taxName, @taxPercent);
     ```
-- update a taxes type
+- update a tax's type
   - ```sql
     UPDATE Taxes 
     SET name=@taxName, percent = @taxPercent
     WHERE taxes_id = @taxesId;
     ```
-- remove a taxes type
+- remove a tax's type
   - ```sql
     DELETE FROM Taxes WHERE taxes_id = @taxesId;
     ```
@@ -158,9 +158,10 @@
     );
     ```
 - As a customer, I want to be able to place an order containing all the items in my shopping cart.
-  - First insert header then insert all products into the joining table along with the product info about it, 
-    do note that the product insertion is done with one insertion but the value rows are dynamically inserted 
-    before the values are put in via de the parameters, this means that only the number belonging to the current inserted row is put in via a string builder
+  - First insert a header, then insert all products into the joining table along with the product info about it, 
+    do note that the product insertion is done with one insertion, but the value rows are dynamically inserted 
+    before the values are put in via the parameters; 
+    this means that only the number belonging to the current inserted row is put in via a string builder
     
     ```sql
     INSERT INTO Orders (user_id, order_date, statusId, orderTotal, money_id)

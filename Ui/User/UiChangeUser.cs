@@ -51,7 +51,7 @@ internal class UiChangeUser : UiItem
                 : Lang.GetLangString("userChange_fail"));
         // if the permission of the user has been updated, then the list needs also to be updated to reflect the changes
         if (updatePerm) StateHolder.UpdateUsers?.Invoke();
-    } 
+    }
     
     protected override bool Accessible()
     {

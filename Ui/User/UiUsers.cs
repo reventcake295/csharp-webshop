@@ -18,7 +18,7 @@ internal class UiUsers : UiItem
     internal override void Execute()
     {
         // set the method of the current class instance as the Action to execute when the user's menu is to be reloaded
-        StateHolder.UpdateUsers = this.LoadUsers;
+        StateHolder.UpdateUsers = LoadUsers;
         // see if the user's list needs to be updated or generated
         if (SubMenu.Count == 0)
             LoadUsers();

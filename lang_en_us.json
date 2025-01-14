@@ -1,6 +1,6 @@
 {
   "en_us": {
-    "programLoading": "The store is loading.",
+    "programLoading": "",
     "programLoaded": "The store has been loaded",
     "Menu_back_option": "Back",
     "Menu_Users_option": "Users",
@@ -56,7 +56,7 @@
     },
     "usersMenu": {
       "Header": "These are the current users present in the system:",
-      "Question": "Please select one of the users"
+      "Question": "Please select one of the users."
     },
     "user_info_header": "Info of the selected user:",
     "user_info_name": "Username",
@@ -112,11 +112,56 @@
     "userRem_noUserSelected": "Could not begin the process of deletion because there is no user selected. Returning to previous menu.",
     "userRem_userIncomingOrders": "The user you are trying to delete has still incoming orders present, are you sure you will wish to delete this user?",
     "userRem_CouldNotRemoveUser": "Could not delete the user, please try again later, returning to the previous menu.",
-    "userChange_header": "You can update the following information of a user, note that leaving the information empty will assume that the current value is to be used.",
+    "userChange_header": "You can update the following information of a user, note that leaving the field empty will assume that the current value is to be used.",
     "userChange_noUserSelected": "Could not begin the process of editing because there is no user selected. Returning to previous menu.",
     "userChange_success": "Successfully updated the user!",
     "userChange_fail0": "Could not update the user please try again later.",
     "userChange_noChange": "No change in the information of the user provided, returning to the previous menu.",
-    "userChange_permCurrentUser": "You are currently editing the information of your own account so skipping Permission setting."
+    "userChange_permCurrentUser": "You are currently editing the information of your own account so skipping Permission setting.",
+    "catalogMenu": {
+      
+    },
+    "catalogMenu_noProducts": "There are currently no products in the catalog. Please come back later.",
+    "prodAdd": {
+      "Header": "Please fill in the following information for the product:",
+      "ResultFailure": "Could not add the product for some reason, please come back later.",
+      "ResultSuccess": "Successfully added the product to the catalog."
+    },
+    "prod_name": {
+      "Question": "Product name"
+    },
+    "prod_decs": {
+      "Question": "Product description"
+    },
+    "prod_MoneyType": "Please choose one of the options for the type of money:",
+    "prod_money": {
+      "Question": "Money type"
+    },
+    "prod_price": {
+      "Question": "Product price(Excl. Tax)"
+    },
+    "prod_TaxType": "Please choose one of the options for the type of tax:",
+    "prod_taxes": {
+      "Question": "Tax type"
+    },
+    "catProd_info_header": "Info of the selected product:",
+    "catProd_info_name": "Product",
+    "catProd_info_description": "Description",
+    "catProd_info_priceExcl": "Price (Excl. tax)",
+    "catProd_info_priceTotal": "Price (Incl. tax)",
+    "prodEdit_noProductSelected": "There is currently no product selected, returning to previous menu.",
+    "prodEdit": {
+      "Header": "Please fill in the information you wish to edit, note that leaving the field empty will assume that the current value is to be used.",
+      "ResultNoMatch": "All fields for editing match the current fields, so no edits will be made, returning to the previous menu.",
+      "ResultFailure": "Could not update the product, please try again later. Returning to the previous menu.",
+      "ResultSuccess": "Successfully updated the product. Returning to the previous menu."
+    },
+    "prodRem": {
+      "ResultNoMatch": "No product selected, please try again later. Retuning to the previous menu.",
+      "Question": "Are you sure you wish to delete this product? (Y/N)",
+      "ResultFailure": "Could not delete the product from the catalog, Returning to the previous menu.",
+      "ResultSuccess": "Successfully deleted the product from the catalog. Returning to the Catalog."
+    },
+    "prodRem_cancel": "Canceling deletion process, returning to the previous menu."
   }
 }
