@@ -14,7 +14,7 @@ internal class UiAddUser : UiItem
         if (!Accessible()) return;
         Console.WriteLine(Lang.GetLangString("userAdd_header"));
         if (!UiHelper.AskQuestion("userAdd_user", out string username, "")) return;
-        if (!string.IsNullOrWhiteSpace(username) && Store.User.UserExists(username))
+        if (!string.IsNullOrWhiteSpace(username) && Users.GetInstance().UserExists(username))
         {
             Console.WriteLine(Lang.GetLangGroupString("userAdd_user", Lang.StringType.QuestionWrong));
             return;
@@ -44,14 +44,14 @@ internal class UiAddUser : UiItem
         // due to the way this is handled by the user class to add the user, there are cases that will throw exceptions for us to handle
         try
         {
-            if (!Store.User.AddUser(username, password, permissionRank, adresStreet, adresNumber, adresAdd, adresPostal,
+            if (!Users.GetInstance().AddUser(username, password, permissionRank, adresStreet, adresNumber, adresAdd, adresPostal,
                                     adresCity,
                                     email))
             {
                 Console.WriteLine(Lang.GetLangGroupString("userAdd_user", Lang.StringType.ResultFailure));
                 return;
             }
-            // update the users so that when the menu loads the new users is also present
+            // update the users so that when the menu loads, the new users are also present
             StateHolder.UpdateUsers?.Invoke();
             Console.WriteLine(Lang.GetLangGroupString("userAdd_user", Lang.StringType.ResultSuccess));
             

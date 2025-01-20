@@ -26,21 +26,18 @@ internal class UiUsers : UiItem
         DisplayMenu("usersMenu");
     }
 
-    protected override bool Accessible()
-    {
-        return Session.PermissionRank == Perm.Admin;
-    }
+    protected override bool Accessible() => Session.PermissionRank == Perm.Admin;
 
     private void LoadUsers()
     {
         // clear the current items list and gather the user's list anew
         SubMenu.Clear();
-        Store.User[] users = Users.GetAllUsers();
+        List<Store.User> users = Users.GetInstance().GetAllUsers();
         // add the users to the SubMenu list
-        for (int i = 0; i < users.Length; i++)
+        for (int i = 0; i < users.Count; i++)
             SubMenu.Add((i + 1).ToString(), new UiUser(users[i]));
         // add the fixed items at the end
         foreach (KeyValuePair<int, UiItem> fixedItem in _fixedItems)
-            SubMenu.Add((fixedItem.Key + users.Length).ToString(), fixedItem.Value);
+            SubMenu.Add((fixedItem.Key + users.Count).ToString(), fixedItem.Value);
     }
 }

@@ -50,8 +50,8 @@ internal static class UiHelper
             if (typeof(T) == typeof(bool))
                 response = response.ToLower() switch
                 {
-                    "y" or "yes" or "true" or "on"  => "true",
-                    "n" or "false" or "off" or "no" => "false",
+                    "y" or "yes" or "true" or "on"  => bool.TrueString,
+                    "n" or "false" or "off" or "no" => bool.FalseString,
                     _                               => response
                 };
             // if it is a decimal, then ensure that when either a ',' or '.'
@@ -79,7 +79,8 @@ internal static class UiHelper
             }
 
             // To convert the response string to the given type.
-            // I would like to add the exception for string when it is one. However, I can't figure out how to do that without a lot of problems popping up,
+            // I would like to add the exception for string when it is one.
+            // However, I can't figure out how to do that without a lot of problems popping up
             // because it doesn't recognize an if comparison as a valid check for it
             try
             {

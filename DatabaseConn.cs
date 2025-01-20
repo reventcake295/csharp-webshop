@@ -16,10 +16,7 @@ internal class DatabaseConn
     /// Get the instance of the class or create the instance if not done before
     /// </summary>
     /// <returns>The class instance</returns>
-    internal static DatabaseConn GetInstance()
-    {
-        return _instance ??= new DatabaseConn();
-    }
+    internal static DatabaseConn GetInstance() => _instance ??= new DatabaseConn();
 
     private DatabaseConn()
     {
@@ -32,20 +29,21 @@ internal class DatabaseConn
         string connectionString = $"Server={dbSection.GetValue<string>("database")}; "+
                                   $"Username={dbSection.GetValue<string>("user")}; "+
                                   $"Password={dbSection.GetValue<string>("password")}; "+
-                                  $"Database={dbSection.GetValue<string>("schema")};";
+                                  $"Database={dbSection.GetValue<string>("schema")}; "+
+                                  "AllowUserVariables=true;";
         _connection = new MySqlConnection(connectionString);
     }
     
     private readonly MySqlConnection _connection;
-
-    internal Task<int> ExecuteCommandAsync(MySqlCommand command)
+    
+    internal static Task<int> ExecuteCommandAsync(MySqlBatch command)
     {
-        Task<int> result = _connection.OpenAsync().ContinueWith(_ =>
+        Task<int> result = GetInstance()._connection.OpenAsync().ContinueWith(_ =>
         {
-            command.Connection = _connection;
+            command.Connection = GetInstance()._connection;
             Task<int> result1 = command.ExecuteNonQueryAsync().ContinueWith(task1 =>
             {
-                _connection.CloseAsync();
+                GetInstance()._connection.CloseAsync();
                 return task1.Result;
             });
             return result1.Result;
@@ -53,11 +51,11 @@ internal class DatabaseConn
         return result;
     }
 
-    internal Task<MySqlDataReader> ExecuteReaderAsync(MySqlCommand command)
+    internal static Task<MySqlDataReader> ExecuteReaderAsync(MySqlBatch command)
     {
-        Task<Task<MySqlDataReader>> result = _connection.OpenAsync().ContinueWith(_ =>
+        Task<Task<MySqlDataReader>> result = GetInstance()._connection.OpenAsync().ContinueWith(_ =>
         {
-            command.Connection = _connection;
+            command.Connection = GetInstance()._connection;
             Task<MySqlDataReader> result = command.ExecuteReaderAsync();
             return result;
         });

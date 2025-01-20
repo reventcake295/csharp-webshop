@@ -23,7 +23,7 @@ internal class UiRemProd : UiItem
             return;
         }
 
-        if (!StateHolder.CurrentProduct.Delete())
+        if (!Products.GetInstance().RemoveProduct(StateHolder.CurrentProduct.ProductId))
         {
             Console.WriteLine(Lang.GetLangGroupString("prodRem", Lang.StringType.ResultFailure));
             return;

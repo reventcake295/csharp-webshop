@@ -7,11 +7,8 @@ internal class Money : SqlBuilder
 {
     public static Dictionary<int, Money> MoneyTypes { get; private set; } = [];
     
-    [Mapping(ColumnName = "money_id")]
     public int Id { get; set; }
-    [Mapping(ColumnName = "name")]
     public string Currency { get; set; } = string.Empty;
-    [Mapping(ColumnName = "displayFormat")]
     private string Format { get; set; } =  string.Empty;
 
     private Money(int id, string currency, string format)
@@ -27,7 +24,7 @@ internal class Money : SqlBuilder
     internal static void LoadMoney()
     {
         Money taxes = new();
-        taxes.StartStmt("select * from Money");
+        taxes.SingleStmt("select * from Money");
         MySqlDataReader result = taxes.ExecQueryAsync().Result;
         while (result.Read())
         {

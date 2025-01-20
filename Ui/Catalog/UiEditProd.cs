@@ -27,7 +27,7 @@ internal class UiEditProd : UiItem
         foreach (KeyValuePair<int,Money> money in Money.MoneyTypes)
             Console.WriteLine($"    {money.Key}: {money.Value.Currency}");
         Console.WriteLine();
-        if (!UiHelper.AskQuestion("prod_money", out int moneyId, currentProduct.MoneyId, 
+        if (!UiHelper.AskQuestion("prod_money", out int moneyId, currentProduct.MoneyType.Id, 
                                   optional:true, choices:Money.MoneyTypes.Keys.ToList())) return;
         Money moneyType = Money.MoneyTypes[moneyId];
         
@@ -40,14 +40,14 @@ internal class UiEditProd : UiItem
         foreach (KeyValuePair<int,Taxes> tax in Taxes.TaxTypes)
             Console.WriteLine($"    {tax.Key}: {tax.Value.TaxName}");
         Console.WriteLine();
-        if (!UiHelper.AskQuestion("prod_taxes", out int taxesId, currentProduct.TaxesId, 
+        if (!UiHelper.AskQuestion("prod_taxes", out int taxesId, currentProduct.Taxes.Id, 
                                   optional:true, choices:Taxes.TaxTypes.Keys.ToList())) return;
         Taxes taxes = Taxes.TaxTypes[taxesId];
         
         // ensure that at least one field is to be updated
         if (currentProduct.ProductName == productName && currentProduct.ProductDescription == productDescription &&
-            currentProduct.ProductPrice == productPrice && currentProduct.TaxesId == taxesId &&
-            currentProduct.MoneyId == moneyId)
+            currentProduct.ProductPrice == productPrice && currentProduct.Taxes.Id == taxesId &&
+            currentProduct.MoneyType.Id == moneyId)
         {
             Console.WriteLine(Lang.GetLangGroupString("prodEdit", Lang.StringType.ResultNoMatch));
             return;

@@ -37,7 +37,7 @@ internal class UiAddProd : UiItem
                                   optional:true, choices:Taxes.TaxTypes.Keys.ToList())) return;
         Taxes taxes = Taxes.TaxTypes[taxesId];
         
-        if (!Product.Add(productName, productDescription, moneyType, productPrice, taxes))
+        if (!Products.GetInstance().AddProduct(productName, productDescription, moneyType, productPrice, taxes))
         {
             Console.WriteLine(Lang.GetLangGroupString("prodAdd", Lang.StringType.ResultFailure));
             return;

@@ -27,6 +27,7 @@
     "Menu_AddUser_option": "Create user",
     "Menu_AddProd_option": "Create product",
     "Menu_AddCartProd_option": "Add product to cart",
+    "Menu_CartProdUpdate_option": "Change product count",
     "userAdd_emptyAny": "You did not fill in one of the required fields, returning to previous menu.",
     "userAdd_permissionCastFailed": "Could not resolve given permission type, returning to previous menu",
     "userAdd_header": "Please fill in the following prompt for the user information:",
@@ -56,7 +57,7 @@
     },
     "usersMenu": {
       "Header": "These are the current users present in the system:",
-      "Question": "Please select one of the users."
+      "Question": "Please select one of the users"
     },
     "user_info_header": "Info of the selected user:",
     "user_info_name": "Username",
@@ -110,7 +111,10 @@
       "ResultSuccess": "User has successfully removed, returning to the Users menu."
     },
     "userRem_noUserSelected": "Could not begin the process of deletion because there is no user selected. Returning to previous menu.",
-    "userRem_userIncomingOrders": "The user you are trying to delete has still incoming orders present, are you sure you will wish to delete this user?",
+    "userRem_userIncomingOrders": {
+      "Question": "The user you are trying to delete has still incoming orders present, are you sure you will wish to delete this user?",
+      "ResultFailure": "Canceling deletion process, and returning to the previous menu."
+    },
     "userRem_CouldNotRemoveUser": "Could not delete the user, please try again later, returning to the previous menu.",
     "userChange_header": "You can update the following information of a user, note that leaving the field empty will assume that the current value is to be used.",
     "userChange_noUserSelected": "Could not begin the process of editing because there is no user selected. Returning to previous menu.",
@@ -118,10 +122,8 @@
     "userChange_fail0": "Could not update the user please try again later.",
     "userChange_noChange": "No change in the information of the user provided, returning to the previous menu.",
     "userChange_permCurrentUser": "You are currently editing the information of your own account so skipping Permission setting.",
-    "catalogMenu": {
-      
-    },
-    "catalogMenu_noProducts": "There are currently no products in the catalog. Please come back later.",
+    "catalogMenu_noProducts_admin": "There are currently no products in the catalog.",
+    "catalogMenu_noProducts": "There are currently no products in the catalog. Returning to the previous menu.",
     "prodAdd": {
       "Header": "Please fill in the following information for the product:",
       "ResultFailure": "Could not add the product for some reason, please come back later.",
@@ -162,6 +164,46 @@
       "ResultFailure": "Could not delete the product from the catalog, Returning to the previous menu.",
       "ResultSuccess": "Successfully deleted the product from the catalog. Returning to the Catalog."
     },
-    "prodRem_cancel": "Canceling deletion process, returning to the previous menu."
-  }
+    "prodRem_cancel": "Canceling deletion process, returning to the previous menu.",
+    "ordersMenu_Admin": {
+      "Header": "These are the current incoming orders",
+      "ResultNoMatch": "There are currently no orders for you to view. Returning to the previous menu."
+    },
+    "ordersMenu_Customer": {
+      "Header": "These are the orders belonging to you",
+      "ResultNoMatch": "There are currently no orders for you to view. Returning to the previous menu."
+    },
+    "ordersMenu_empty": "There are currently no orders for you to view. Returning to the previous menu.",
+    "orderDis_user": "Ordered by",
+    "orderDis_noUser": "This order no longer has an user connected.",
+    "orderDis_total": "Order total",
+    "orderDis_date": "Order date",
+    "orderDis_products": "Order products",
+    "cartMenu_total": "Cart total(Incl. Tax)",
+    "cartProd_info_total": "Product total",
+    "cartMenu_head": "Shopping cart:",
+    "cartMenu": {
+      "Header": "Current products in the cart",
+      "ResultNoMatch": "There are currently no products in the shopping cart, returning to the previous menu."
+    },
+    "addCartProd_count": {
+      "Question": "How many of the product do you wish to add?"
+    },
+    "updateCartProd_count": {
+      "Question": "How much do you wish to change the quantity to?"
+    },
+    "remCartProd": {
+      "Question": "Are you sure you wish to remove this product from the shopping cart? (Y/N)",
+      "ResultFailure": "Canceling deletion process, returning to the previous menu."
+    },
+    "cartProd_addedToExisting": "The given amount has successfully been added to the existing amount in the cart.",
+    "cartProd_addedToCart": "The given product has successfully been added to the cart.",
+    "cartProd_noProductSelected": "There is no product selected currently, please try again later. Returning to the previous menu.",
+    "cartProd_info_count": "Products count",
+    "cartOrder_error": "Could not create an order based on the current shopping cart, please try again later. Returning to the previous menu.",
+    "cartOrder_success": "Successfully created the order. Returning to the previous menu."
+  },
+  "order_noOrderSelected": "There is currently no order selected, please try again later. Returning to the previous menu",
+  "order_statusFailure": "Something went wrong while trying to update the order status, please try again later. Returning to the previous menu.",
+  "order_statusUpdated": "Order status has successfully been updated. Returning to the previous menu."
 }

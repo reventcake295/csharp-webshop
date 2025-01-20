@@ -4,10 +4,9 @@ namespace Store;
 
 internal class Settings : SqlBuilder
 {
-    [Mapping(ColumnName = "MaxInputLoop")] internal static int MaxInputLoop { get; private set; } = 1;
-    [Mapping(ColumnName = "Lang")] internal static string Lang { get; private set; } = "en";
-
-    [Mapping(ColumnName = "AvailableLangs")] internal static List<string> AvailableLangs { get; private set; } = [ "en" ];
+    internal static int MaxInputLoop { get; private set; } = 1;
+    internal static string Lang { get; private set; } = "en";
+    internal static List<string> AvailableLangs { get; private set; } = [ "en" ];
 
     internal static Money DefaultMoney { get; private set; } = new();
     internal static Taxes DefaultTaxes { get; private set; } = new();
@@ -21,7 +20,7 @@ internal class Settings : SqlBuilder
 
     protected override void LoadData()
     {
-        StartStmt("SELECT DefaultLang, AvailableLangs, MaxInputLoop, DefaultMoney, DefaultTaxes FROM capstoneStore.Settings;");
+        SingleStmt("SELECT DefaultLang, AvailableLangs, MaxInputLoop, DefaultMoney, DefaultTaxes FROM capstoneStore.Settings;");
         Task<MySqlDataReader> settingsLoad = ExecQueryAsync();
         settingsLoad.Wait();
         if (settingsLoad.Result == null) throw new FileLoadException("Failed to load settings");

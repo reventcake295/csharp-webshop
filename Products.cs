@@ -4,85 +4,116 @@ namespace Store;
 
 internal class Products : SqlBuilder
 {
-    private Products() { }
+    private Products() => LoadData();
     
-    internal static Product[] GetAllProducts()
+    private static Products? _instance;
+    internal static Products GetInstance() => _instance ??= new Products();
+
+    private readonly List<Product> _products = [];
+    protected sealed override void LoadData()
     {
-        Products productsInstance = new();
-        productsInstance.StartStmt("SELECT product_id, name, description, price, money_id, taxes_id FROM Products;");
-        MySqlDataReader result = productsInstance.ExecQueryAsync().Result;
+        SingleStmt("SELECT product_id, name, description, price, money_id, taxes_id FROM Products;");
+        MySqlDataReader result = ExecQueryAsync().Result;
         if (!result.HasRows) {
-            productsInstance.CloseConnection();
-            return [];
+            CloseConnection();
+            return;
         }
-        Product[] products = SqlHelper.MapToClassArray<Product>(result);
-        productsInstance.CloseConnection();
-        return products;
+        while (result.Read())
+        {
+            Product product = new(
+                result.GetInt32("product_id"),
+                result.GetString("name"),
+                result.GetString("description"),
+                result.GetDecimal("price"),
+                Taxes.TaxTypes[result.GetInt32("taxes_id")],
+                Money.MoneyTypes[result.GetInt32("money_id")]
+            );
+            _products.Add(product);
+        }
+        CloseConnection();
+    }
+
+    protected override void LoadData(int id)
+    {
+        StartStmt("SELECT product_id, name, description, price, money_id, taxes_id FROM Products WHERE product_id = @id;");
+        AddArg("@id", id);
+        EndStmt();
+        MySqlDataReader result = ExecQueryAsync().Result;
+        if (!result.HasRows) {
+            CloseConnection();
+            return;
+        }
+
+        Product product = new(
+            result.GetInt32("product_id"),
+            result.GetString("name"),
+            result.GetString("description"),
+            result.GetDecimal("price"),
+            Taxes.TaxTypes[result.GetInt32("taxes_id")],
+            Money.MoneyTypes[result.GetInt32("money_id")]
+            );
+        _products.Add(product);
+        CloseConnection();
+    }
+
+    internal List<Product> GetAllProducts()
+    {
+        return _products;
+    }
+    
+    internal Product? GetProductById(int id) => _products.Find(product => product.ProductId == id);
+    
+    internal bool AddProduct(string productName, string productDescription, Money moneyType, decimal productPrice, Taxes taxes)
+    {
+        StartStmt("INSERT INTO Products (name, description, money_id, taxes_id, price) VALUES (@productName, @productDescription, @productMoneyId, @productTaxesId, @productPrice) RETURNING product_id;");
+        AddArg("@productName", productName);
+        AddArg("@productDescription", productDescription);
+        AddArg("@productMoneyId", moneyType.Id);
+        AddArg("@productTaxesId", taxes.Id);
+        AddArg("@productPrice", productPrice);
+        EndStmt();
+        MySqlDataReader result = ExecQueryAsync().Result;
+        // get the wanted results from the query
+        bool hasRows = result.HasRows;
+        int productId = result.GetInt32("product_id");
+        CloseConnection();
+        // create and add the product to the stored array
+        _products.Add(new Product(productId, productName, productDescription, productPrice, taxes, moneyType));
+        return hasRows;
+    }
+
+    internal bool RemoveProduct(int productId)
+    {
+        Product? product = GetProductById(productId);
+        if (product == null) return false;
+        if (!product.Delete()) return false;
+        _products.Remove(product);
+        return true;
     }
 }
 
 internal class Product : SqlBuilder
 {
-    [Mapping(ColumnName = "product_id")]
-    public int ProductId { get; set; }
+    internal int ProductId { get; set; } // this may say its unused, but it is necessary for the SQlHelper Class mapper 
+    
+    internal Money MoneyType { get; private set; }
+    
+    internal Taxes Taxes { get; private set; }
+    
+    internal string ProductName { get; private set; }
+    
+    internal string ProductDescription { get; private set; }
+    
+    internal decimal ProductPrice { get; private set; }
 
-    private int _moneyId;
-    [Mapping(ColumnName = "money_id")]
-    public int MoneyId
+    internal Product(int productId, string productName, string productDescription, decimal productPrice, Taxes taxes, Money money)
     {
-        get => _moneyId;
-        set
-        {
-            _moneyId = value;
-            MoneyType = Money.MoneyTypes[value];
-        }
-    }
-    
-    public Money MoneyType { get; private set; } = Settings.DefaultMoney;
-//    [Mapping(ColumnName = "money_id")]
-//    public int MoneyId { get; set; }
-//    [Mapping(ColumnName = "Money.displayFormat")]
-//    public string MoneyFormat { get; set; }
-//    [Mapping(ColumnName = "Money.name")]
-//    public string MoneyName { get; set; }
-    private int _taxesId;
-    
-    [Mapping(ColumnName = "taxes_id")]
-    public int TaxesId {
-        get => _taxesId;
-        private set // this may say unused but it is by the SqlHelper Class mapper to assign the Taxes  
-        {
-            _taxesId = value;
-            Taxes = Taxes.TaxTypes[value];
-        }
-    }
-    
-    public Taxes Taxes { get; private set; } = Settings.DefaultTaxes;
-//    public int TaxesId { get; set; }
-//    [Mapping(ColumnName = "Taxes.name")]
-//    public string TaxesName { get; set; }
-//    [Mapping(ColumnName = "Taxes.percent")]
-//    public int TaxesPercent { get; set; }
-    
-    [Mapping(ColumnName = "name")]
-    public string ProductName { get; set; } = string.Empty;
-    [Mapping(ColumnName = "description")]
-    public string ProductDescription { get; set; } = string.Empty;
-    [Mapping(ColumnName = "price")]
-    public decimal ProductPrice { get; set; }
-    
-    internal static bool Add(string productName, string productDescription, Money moneyType, decimal productPrice, Taxes taxes)
-    {
-        Product product = new();
-        product.StartStmt("INSERT INTO Products (name, description, money_id, taxes_id, price) VALUES (@productName, @productDescription, @productMoneyId, @productTaxesId, @productPrice);");
-        product.AddArg("@productName", productName);
-        product.AddArg("@productDescription", productDescription);
-        product.AddArg("@productMoneyId", moneyType.Id);
-        product.AddArg("@productTaxesId", taxes.Id);
-        product.AddArg("@productPrice", productPrice);
-        int result = product.ExecCmdAsync().Result;
-        product.CloseConnection();
-        return result > 0;
+        ProductId = productId;
+        MoneyType = money;
+        Taxes = taxes;
+        ProductName = productName;
+        ProductDescription = productDescription;
+        ProductPrice = productPrice;
     }
     
     internal bool Edit(string productName, string productDescription, Money moneyType, decimal productPrice, Taxes taxes)
@@ -94,8 +125,8 @@ internal class Product : SqlBuilder
         AddArg("@productTaxesId", taxes.Id);
         AddArg("@productPrice", productPrice);
         AddArg("@productId", ProductId);
+        EndStmt();
         bool result = ExecCmdAsync().Result > 0;
-        CloseConnection();
         if (result)
         {
             ProductName = productName;
@@ -109,16 +140,11 @@ internal class Product : SqlBuilder
     
     internal bool Delete()
     {
-        StartStmt("DELETE FROM Products WHERE product_id = @productId;");
+        SingleStmt("DELETE FROM Products WHERE product_id = @productId;");
         int result = ExecCmdAsync().Result;
-        CloseConnection();
         return result > 0;
     }
-
-
-    internal void CreateOrderProduct(int count)
-    {
-        throw new NotImplementedException();
-    }
+    
+    internal OrderProduct CreateOrderProduct(int count) => new(this, count);
 
 }

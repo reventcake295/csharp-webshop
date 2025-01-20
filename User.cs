@@ -8,44 +8,35 @@ namespace Store;
 /// <summary>
 /// The backing class for the table Users, do note that certain columns present in the table or not present here
 /// </summary>
-internal class User : SqlBuilder
+internal class User(
+    int id,
+    string username,
+    string email,
+    string adresStreet,
+    int adresNumber,
+    string adresAdd,
+    string adresPostal,
+    string adresCity,
+    Perm perm)
+    : SqlBuilder
 {
-    [Mapping(ColumnName = "user_id")]
-    public int Id { get; private set; } // this may say that it is unused,
-                                        // but it is by the SqlHelper Class mapper
-                                        // for assigning the id from the database
-    [Mapping(ColumnName = "username")]
-    public string Username { get; private set; } = string.Empty;
+    public int Id { get; } = id;
     
-    private int _authLevelId;
-    [Mapping(ColumnName = "auth_id")]
-    public int AuthLevelId
-    {
-        get => _authLevelId;
-        private set
-        {
-            _authLevelId = value;
-            PermissionRank = (Perm)value;
-        }
-    }
-    public Perm PermissionRank { get; private set; }
-    
-    [Mapping(ColumnName = "adres_street")]
-    public string AdresStreet { get; private set; } = string.Empty;
-    
-    [Mapping(ColumnName = "adres_number")]
-    public int AdresNumber { get; private set; }
-    
-    [Mapping(ColumnName = "adres_add")]
-    public string AdresAdd { get; private set; } = string.Empty;
-    
-    [Mapping(ColumnName = "adres_postal")]
-    public string AdresPostal { get; private set; } = string.Empty;
-    
-    [Mapping(ColumnName = "adres_city")]
-    public string AdresCity { get; private set; } = string.Empty;
+    public string Username { get; } = username;
 
-    [Mapping(ColumnName = "email")] public string Email { get; private set; } = string.Empty;
+    public Perm PermissionRank { get; private set; } = perm;
+
+    public string AdresStreet { get; private set; } = adresStreet;
+
+    public int AdresNumber { get; private set; } = adresNumber;
+
+    public string AdresAdd { get; private set; } = adresAdd;
+
+    public string AdresPostal { get; private set; } = adresPostal;
+
+    public string AdresCity { get; private set; } = adresCity;
+
+    public string Email { get; private set; } = email;
 
     internal bool EditUser(Perm permissionRank, string adresStreet, int adresNumber, string adresAdd, string adresPostal, string adresCity, string email)
     {
@@ -60,12 +51,13 @@ internal class User : SqlBuilder
         AddArg("@adresPostal", adresPostal);
         AddArg("@adresCity", adresCity);
         AddArg("@authId", authId);
+        EndStmt();
         int updateUser = ExecCmdAsync().Result;
         CloseConnection();
         if (!(updateUser > 0)) return false;
         
         // update the fields in the instance too so it does not have to grab the whole list from the database again
-        AuthLevelId = authId;
+        PermissionRank = permissionRank;
         AdresStreet = adresStreet;
         AdresNumber = adresNumber;
         AdresAdd = adresAdd;
@@ -77,93 +69,36 @@ internal class User : SqlBuilder
     
     internal bool RemoveUser()
     {
-        if (Orders.UserHasOrders(Id))
+        if (Orders.GetInstance().UserHasOrders(Id))
         {
             // remove the user_id from all orders where they are set to the current user to delete
             StartStmt("UPDATE Orders SET user_id = NULL WHERE user_id = @userId");
             AddArg("@userId", Id);
+            EndStmt();
             int orderResult = ExecCmdAsync().Result;
             if (!(orderResult > 0))
             {
                 CloseConnection();
                 return false;
             }
+            // remove the user id from the locally stored orders too
+            foreach (Order userOrder in Orders.GetInstance().GetUserOrders(Id))
+                userOrder.CustomerId = 0;
         }
         // Delete the user itself from the database
         StartStmt("DELETE FROM users WHERE `user_id` = @userId");
         AddArg("@userId", Id);
+        EndStmt();
         int userResult = ExecCmdAsync().Result;
         bool deleted = userResult > 0;
         CloseConnection();
+
+        
+        Users.GetInstance().RemoveUser(this);
+        
         return deleted;
         // we do not update anything else here that is dependent on the calling function to do
     }
-
-    internal static bool UserExists(int userId)
-    {
-        User user = new();
-        user.StartStmt("SELECT count(*) AS userCount FROM users WHERE user_id=@userId;");
-        user.AddArg("@user_id", userId);
-        MySqlDataReader result = user.ExecQueryAsync().Result;
-        if (result.Read())
-        {
-            if (result.GetInt32("userCount") > 0)
-            {
-                user.CloseConnection();
-                return true;
-            }
-        }
-        user.CloseConnection();
-        return false;
-    }
-    
-    internal static bool UserExists(string username)
-    {
-        User user = new();
-        user.StartStmt("SELECT count(*) AS userCount FROM users WHERE username=@username;");
-        user.AddArg("@username", username);
-        MySqlDataReader result = user.ExecQueryAsync().Result;
-        if (result.Read())
-        {
-            if (result.GetInt32("userCount") > 0)
-            {
-                user.CloseConnection();
-                return true;
-            }
-        }
-        user.CloseConnection();
-        return false;
-    }
-    
-    internal static bool AddUser(string username, string password, Perm permissionRank, string adresStreet, int adresNumber, string adresAdd, string adresPostal, string adresCity, string email)
-    {
-        // ensure that the current user is allowed to do this, high chance that the calling method has also already done this, but we do it anyway
-        if (Session.PermissionRank != Perm.Admin) throw new AuthenticationException("You must be Admin to use this command");
-        
-        if (UserExists(username)) throw new ConstraintException("User already exists");
-        
-        User user = new();
-        // insert the user into the database
-        // yes, I know that this line is long,
-        // but if I wrap it to the next line,
-        // it will throw an error and otherwise not check the syntax of the SQL
-        user.StartStmt("INSERT INTO users (username, password, email, adres_street, adres_number, adres_add, adres_postal, adres_city, auth_id) VALUES (@username, @password, @email, @adresStreet, @adresNumber, @adresAdd, @adresPostal, @adresCity, @authId)");
-        
-        user.AddArg("@username", username);
-        user.AddArg("@password", password);
-        user.AddArg("@email", email);
-        user.AddArg("@adresStreet", adresStreet);
-        user.AddArg("@adresNumber", adresNumber);
-        user.AddArg("@adresAdd", adresAdd);
-        user.AddArg("@adresPostal", adresPostal);
-        user.AddArg("@adresCity", adresCity);
-        user.AddArg("@authId", (int)permissionRank); // the value is stored as an int in the database, and I don't like to take chances that the system my try to convert it differently during execution
-        int result = user.ExecCmdAsync().Result;
-        // we don't have to close the connection because that is already done in the called function
-        return result == 1; // we expect one row to be affected and that's it
-    }
-
-    
 }
 internal enum Perm
 {
@@ -174,20 +109,95 @@ internal enum Perm
 
 internal class Users : SqlBuilder
 {
-    private Users() { }
+    private Users() => LoadData();
     
-    internal static User[] GetAllUsers()
+    private static Users? _instance;
+    
+    internal static Users GetInstance() => _instance ??= new Users();
+    
+    private readonly List<User> _users = [];
+
+    protected sealed override void LoadData()
+    {
+        SingleStmt("SELECT user_id, username, email, adres_street, adres_number, adres_add, adres_postal, adres_city, auth_id FROM users;");
+        MySqlDataReader result = ExecQueryAsync().Result;
+        while (result.Read())
+        {
+            User user = new(
+                result.GetInt32("user_id"),
+                result.GetString("username"),
+                result.GetString("email"),
+                result.GetString("adres_street"),
+                result.GetInt32("adres_number"),
+                result.GetString("adres_add"),
+                result.GetString("adres_postal"),
+                result.GetString("adres_city"),
+                (Perm)result.GetInt32("auth_id")
+            );
+            _users.Add(user);
+        }
+        CloseConnection();
+    }
+
+    internal List<User> GetAllUsers()
     {
         if (Session.PermissionRank != Perm.Admin) throw new SecurityException("You must be Admin to use this command");
-        Users usersInstance = new();
-        usersInstance.StartStmt("SELECT user_id, username, email, adres_street, adres_number, adres_add, adres_postal, adres_city, auth_id FROM users;");
-        MySqlDataReader result = usersInstance.ExecQueryAsync().Result;
-        if (!result.HasRows) {
-            usersInstance.CloseConnection();
-            return []; // doubt this will ever be the case, but it must be here to prevent edge cases
-        }
-        User[] users = SqlHelper.MapToClassArray<User>(result);
-        usersInstance.CloseConnection();
-        return users;
+        return _users;
+    }
+    
+    internal bool AddUser(string username, string password, Perm permissionRank, string adresStreet, int adresNumber, string adresAdd, string adresPostal, string adresCity, string email)
+    {
+        // ensure that the current user is allowed to do this,
+        // high chance that the calling method has also already done this, but we do it anyway
+        if (Session.PermissionRank != Perm.Admin) throw new AuthenticationException("You must be Admin to use this command");
+        
+        if (UserExists(username)) throw new ConstraintException("User already exists");
+        
+        // insert the user into the database
+        // yes, I know that this line is long,
+        // but if I wrap it to the next line,
+        // it will throw an error and otherwise not check the syntax of the SQL
+        StartStmt("INSERT INTO users (username, password, email, adres_street, adres_number, adres_add, adres_postal, adres_city, auth_id) VALUES (@username, @password, @email, @adresStreet, @adresNumber, @adresAdd, @adresPostal, @adresCity, @authId) RETURNING user_id;");
+        AddArg("@username", username);
+        AddArg("@password", password);
+        AddArg("@email", email);
+        AddArg("@adresStreet", adresStreet);
+        AddArg("@adresNumber", adresNumber);
+        AddArg("@adresAdd", adresAdd);
+        AddArg("@adresPostal", adresPostal);
+        AddArg("@adresCity", adresCity);
+        AddArg("@authId", (int)permissionRank); // the value is stored as an int in the database,
+                                                // and I don't like to take chances that the system my try
+                                                // to convert it differently during execution
+        EndStmt();
+        MySqlDataReader result = ExecQueryAsync().Result;
+        if (!result.Read()) return false;
+        int userId = result.GetInt32("user_id");
+        _users.Add(new User(
+                            userId, 
+                            username,
+                            email,
+                            adresStreet,
+                            adresNumber,
+                            adresAdd,
+                            adresPostal,
+                            adresCity,
+                            permissionRank
+                       ));
+        // we don't have to close the connection because that is already done in the called function
+        return true; // we expect one row to be affected and that's it
+    }
+    
+    internal bool UserExists(string username) => _users.Any(user => user.Username == username);
+    
+    internal bool UserExists(int userId) => _users.Any(user => user.Id == userId);
+
+    internal void RemoveUser(User user) => _users.Remove(user);
+
+    public User GetUserById(int id)
+    {
+        User? user = _users.Find(user => user.Id == id);
+        if (user == null) throw new ConstraintException("User not found");
+        return user;
     }
 }

@@ -8,7 +8,21 @@ internal class UiOrderAccept : UiItem
     }
     internal override void Execute()
     {
-        throw new NotImplementedException();
+        if (!Accessible()) return;
+        if (StateHolder.CurrentOrder == null)
+        {
+            Console.WriteLine(Lang.GetLangString("order_noOrderSelected"));
+            return;
+        }
+
+        if (!StateHolder.CurrentOrder.UpdateStatus(OrderStatus.Accepted))
+        {
+            Console.WriteLine(Lang.GetLangString("order_acceptFailure"));
+            return;
+        }
+        Console.WriteLine(Lang.GetLangString("order_accepted"));
+        StateHolder.UpdateOrders?.Invoke();
+        StateHolder.MenuBack = true;
     }
 
     protected override bool Accessible()

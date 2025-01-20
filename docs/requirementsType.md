@@ -61,25 +61,20 @@
     ```sql
     SELECT O.order_id, O.statusId, O.order_date, O.orderTotal, M.displayFormat 
     FROM Orders O
-    JOIN Money M ON M.money_id = O.money_id
     WHERE O.user_id=@userId;
     ```
     specific order selects:
     ```sql
     SELECT P.name, P.description, oP.pcsPrice, oP.count, oP.total, M.name, M.displayFormat, T.name, T.percent, P.money_id, P.taxes_id 
-    FROM orderProducts oP 
-    JOIN Taxes T ON T.taxes_id = oP.taxes_id 
-    JOIN Money M ON M.money_id = oP.money_id
+    FROM orderProducts oP
     JOIN Products P ON oP.product_id = P.product_id 
     WHERE oP.order_id = @orderId; 
     ```
 - As an administrator, I want to see all incoming orders.
   - General overview of incoming orders
     ```sql
-    SELECT O.statusId, O.order_date, O.orderTotal, M.displayFormat 
-    FROM Orders O
-    JOIN Money M ON M.money_id = O.money_id
-    WHERE O.statusId=@statusId;
+    SELECT O.statusId, O.order_date, O.orderTotal
+    FROM Orders O;
     ```
     specific order selects:
     ```sql

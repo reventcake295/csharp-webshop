@@ -6,12 +6,9 @@ internal class Taxes : SqlBuilder
 {
     public static Dictionary<int, Taxes> TaxTypes { get; private set; } = [];
     
-    [Mapping(ColumnName = "taxes_id")]
-    public int Id { get; set; }
-    [Mapping(ColumnName = "percent")]
-    public int TaxRate { get; set; }
-    [Mapping(ColumnName = "name")]
-    public string TaxName { get; set; } = "";
+    internal int Id { get; set; }
+    internal int TaxRate { get; set; }
+    internal string TaxName { get; set; } = "";
     
     public decimal CalculateTax(decimal price)
     {
@@ -26,7 +23,7 @@ internal class Taxes : SqlBuilder
     internal static void LoadTaxes()
     {
         Taxes taxes = new Taxes();
-        taxes.StartStmt("select * from Taxes");
+        taxes.SingleStmt("select * from Taxes");
         MySqlDataReader result = taxes.ExecQueryAsync().Result;
         while (result.Read())
         {

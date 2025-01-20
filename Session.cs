@@ -4,24 +4,19 @@ namespace Store;
 
 internal class Session : SqlBuilder
 {
-    [Mapping(ColumnName = "user_id")]
     internal static int Id { get; private set; }
-    [Mapping(ColumnName = "username")]
     public static string? Username { get; private set; }
     
-    private static int _authLevelId;
-    [Mapping(ColumnName = "auth_id")]
-    public static int AuthLevelId
-    {
-        get => _authLevelId;
-        private set
-        {
-            _authLevelId = value;
-            PermissionRank = (Perm)value;
-        }
-    }
     internal static Perm PermissionRank { get; private set; }
 
+    private static User? _user;
+    internal static User User
+    {
+        get
+        {
+            return _user ??= Users.GetInstance().GetUserById(Id);
+        }
+    }
     private Session()
     {
         // this is placed here for the login method that is placed here because it is in regards to the session that this is handled
@@ -39,6 +34,7 @@ internal class Session : SqlBuilder
         // get the User row from the database
         session.StartStmt("SELECT count(*) AS userCount, password, user_id, auth_id FROM users WHERE username=@username;");
         session.AddArg("@username", username);
+        session.EndStmt();
         MySqlDataReader result = session.ExecQueryAsync().Result;
         // check that there was a result and then check if it was a singular result can be combined because the handling that happens is the same
         if (!result.Read() || result.GetInt32("userCount") != 1)
@@ -63,7 +59,7 @@ internal class Session : SqlBuilder
         }
         
         Username = username;
-        AuthLevelId = authId;
+        PermissionRank = (Perm)authId;
         Id = userId;
         
 //        GetInstance().PermissionRank = Perm.Admin;

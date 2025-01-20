@@ -13,6 +13,13 @@ internal abstract class UiItem
     {
         while (!StateHolder.MenuBack && !Ui.ShuttingDown)
         {
+            // place this here to ensure that the menu remains accessible between menu displays;
+            // this is because it is liable to change for certain menu's (Cart, Orders)
+            if (!Accessible())
+            {
+                Console.WriteLine(Lang.GetLangGroupString(menuId, Lang.StringType.ResultNoMatch));
+                break;
+            }
             UiHelper.DisplayMenu(SubMenu, menuId);
         }
         StateHolder.MenuBack = false;
@@ -29,11 +36,8 @@ internal abstract class UiItem
         return true;
     }
 
-    protected virtual bool Accessible()
-    {
-        // return the default state so that it does not have to be overriden each time
-        return true;
-    }
+    // return the default state so that it does not have to be overriden each time
+    protected virtual bool Accessible() => true;
 
     protected virtual bool Accessible(out Perm key)
     {

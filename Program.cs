@@ -8,9 +8,12 @@ class Program
     {
         // this is the only line in the project that has a direct string placed inside an WriteLine() function
         Console.WriteLine("The store is loading.");
+        
         // load the standard data
         Taxes.LoadTaxes();
         Money.LoadMoney();
+        Products.GetInstance();
+        
         Console.WriteLine(Lang.GetLangString("programLoaded"));
         new Ui.Ui().Run();
     }
