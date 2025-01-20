@@ -1,0 +1,214 @@
+{
+  "nl_nl": {
+    "programLoaded": "De winkel is ingeladen",
+    "Menu_back_option": "Terug",
+    "Menu_Users_option": "Gebruikers",
+    "Menu_UserChangePerm_option": "Wijzig rechten",
+    "Menu_User_option": "Gebruiker",
+    "Menu_RemUser_option": "Verwijder gebruiker",
+    "menu_RemProd_option": "Verwijder product",
+    "Menu_Orders_option": "Orders",
+    "Menu_OrderReject_option": "Weiger order",
+    "Menu_OrderAccept_option": "Accepteer order",
+    "Menu_Order_option": "Order",
+    "Menu_Logout_option": "Uitloggen",
+    "Menu_Login_option": "Inloggen",
+    "Menu_exit_option": "Afsluiten",
+    "Menu_EditProd_option": "Wijzig product",
+    "Menu_ChangeUser_option": "Wijzig gebruiker",
+    "Menu_ChangeLang_option": "Verander taal",
+    "Menu_catalogProd_option": "Catalogus product",
+    "Menu_Catalog_option": "Catalogus",
+    "Menu_CartRem_option": "Verwijder product uit de winkel wagen",
+    "Menu_cartProd_option": "Winkel wagen product",
+    "Menu_CartOrder_option": "Creeër order van winkelwagen",
+    "Menu_Cart_option": "Winkelwagen",
+    "Menu_AddUser_option": "Creeër gebruiker",
+    "Menu_AddProd_option": "Creeër product",
+    "Menu_AddCartProd_option": "Voeg product toe aan winkel wagen",
+    "Menu_CartProdUpdate_option": "Wijzig product aantal in winkel wagen",
+    "userAdd_emptyAny": "U heeft een van de vereiste velden niet ingevuld, terug naar het vorige menu.",
+    "userAdd_header": "Vul de volgende prompts in voor de gebruikers informatie:",
+    "login_header": "Gebruikersnaam en wachtwoord nodig voor inloggen",
+    "default": {
+      "Header": "Wat wilt u doen?",
+      "Question": "Kies een van de bovenstaande",
+      "QuestionMaxLoop": "U heeft te veel pogingen gehad voor deze invoer optie, terugkeren naar het vorige menu.",
+      "QuestionEmpty": "Vul alstublieft een van de opties in.",
+      "QuestionWrong": "Dat was niet een juist antwoord, probeer alstublieft opnieuw."
+    },
+    "login_username": {
+      "Question": "Gebruikersnaam",
+      "QuestionEmpty": "Vul alstublieft uw gebruikersnaam in.",
+      "ResultSuccess": "login succesvol!",
+      "ResultFailure": "Gebruikersnaam en/of wachtwoord is foutief, terug keren naar het algemene menu."
+    },
+    "login_password": {
+      "Question": "Wachtwoord",
+      "QuestionEmpty": "Vul alstublieft uw wachtwoord in.",
+      "ResultSuccess": "login succesvol!",
+      "ResultFailure": "Gebruikersnaam en/of wachtwoord is foutief, terug keren naar het algemene menu."
+    },
+    "logout": {
+      "ResultSuccess": "Uitloggen succesvol!",
+      "ResultFailure": "Kan niet uitloggen, probeer later opnieuw."
+    },
+    "usersMenu": {
+      "Header": "Dit zijn de huidige gebruiker in het systeem:",
+      "Question": "Selecteer een van de gebruikers"
+    },
+    "user_info_header": "Informatie van de geselecteerde gebruiker",
+    "user_info_name": "Gebruikersnaam",
+    "user_info_email": "Email",
+    "user_info_perm": "Toegangs rank",
+    "user_info_address": "Adres",
+    "userAdd_user": {
+      "Question": "Gebruikersnaam",
+      "QuestionEmpty": "Vul een gebruikersnaam in alstublieft",
+      "ResultFailure": "Er ging iets fout tijdens het toevoegen van de gebruiker aan de database, probeer later opnieuw. Terug keren naar het vorige menu,",
+      "ResultSuccess": "De gebruiker is toegevoegd aan de database!",
+      "QuestionWrong": "Een gebruiker met deze naam bestaat al, terug keren naar het vorige menu."
+    },
+    "userAdd_password": {
+      "Question": "Wachtwoord",
+      "QuestionEmpty": "Vul alstublieft een wachtwoord in."
+    },
+    "userAdd_permission": {
+      "Question": "Toegangs rank('Customer','Admin')",
+      "QuestionEmpty": "Vul alstublieft een van de opties in.",
+      "QuestionWrong": "Kan niet de invoer verwerken naar het juiste type, probeer alstublieft opnieuw."
+    },
+    "userAdd_addressStreet": {
+      "Question": "Straatnaam",
+      "QuestionEmpty": "Vul alstublieft een straatnaam in."
+    },
+    "userAdd_addressNumber": {
+      "Question": "Huisnummer",
+      "QuestionEmpty": "Vul alstublieft een huisnummer.",
+      "QuestionWrong": "Kan de invoer niet verwerken naar een nummer, het huisnummer toevoeging is apart, probeer alstublieft opnieuw."
+    },
+    "userAdd_addressAdd": {
+      "Question": "Huisnummer toevoeging"
+    },
+    "userAdd_addressPostal": {
+      "Question": "Postcode (6 tekens)",
+      "QuestionEmpty": "Vul alstublieft ene postcode in.",
+      "QuestionWrong": "De postcode in niet geaccepteerd, de postcode is exact 6 tekens lang. Probeer alstublieft opnieuw."
+    },
+    "userAdd_addressCity": {
+      "Question": "Plaatsnaam",
+      "QuestionEmpty": "Vul alstublieft een plaatsnaam in."
+    },
+    "userAdd_email": {
+      "Question": "Email",
+      "QuestionEmpty": "Vul alstublieft een email in."
+    },
+    "userRem": {
+      "Question": "Weet u zeker dat u dit account wilt verwijderen? (Y/N)",
+      "ResultFailure": "annuleren van verwijderings-process, terugkeren naar vorige menu.",
+      "ResultSuccess": "Gebruiker is succesvol verwijderd, terug keren naar gebruiker menu."
+    },
+    "userRem_noUserSelected": "Kan verwijdering process niet beginnen, omdat er geen gebruiker is geselecteerd. Terug keren naar het vorige menu",
+    "userRem_userIncomingOrders": {
+      "Question": "Het account dat u wilt verwijderen heeft nog inkomende orders staan, weet u zeker dat u dit account wilt verwijderen?",
+      "ResultFailure": "Annulering van verwijdering proces, terug keren naar vorige menu."
+    },
+    "userRem_CouldNotRemoveUser": "Kan gebruiker niet verwijderen, probeer alstublieft later opnieuw. Terug keren naar vorige menu.",
+    "userChange_header": "U kunt de volgende informatie van ene gebruiker wijzigen. Wanneer een veld leeg blijft wordt er vanuit gegaan dat het veld niet veranderd wordt.",
+    "userChange_noUserSelected": "Kan het process van gebruiker informatie wijzigen niet beginnen omdat er geen gebruiker geselecteerd is. Terug keren naar vorige menu.",
+    "userChange_success": "Informatie van gebruiker succesvol gewijzigd!",
+    "userChange_fail": "Kan de gebruiker niet bijwerken, probeer alstublieft later opnieuw.",
+    "userChange_noChange": "Er is geen verandering in de informatie aangeleverd, terug keren naar het vorige menu.",
+    "userChange_permCurrentUser": "U bent momenteel de huidige gebruiker aan het bewerken, so de toegangs rechten optie wordt overgeslagen.",
+    "catalogMenu_noProducts_admin": "Er zijn momenteel geen producten in de catalogus.",
+    "catalogMenu_noProducts": "Er zijn momenteel geen producten in de catalogus. Terug keren naar het vorige menu.",
+    "prodAdd": {
+      "Header": "Vul alstublieft de volgende informatie in voor het product:",
+      "ResultFailure": "Kan het het product niet toevoegen, probeer alstublieft later opnieuw.",
+      "ResultSuccess": "Het product is succesvol toegevoegd aan de catalogus."
+    },
+    "prod_name": {
+      "Question": "Productnaam"
+    },
+    "prod_decs": {
+      "Question": "Product beschrijving"
+    },
+    "prod_MoneyType": "Kies alstublieft een van de volgende waarde noteringen",
+    "prod_money": {
+      "Question": "Notering's type"
+    },
+    "prod_price": {
+      "Question": "Product prijs(Excl. Btw)"
+    },
+    "prod_TaxType": "Kies alstublieft een van de volgende btw types:",
+    "prod_taxes": {
+      "Question": "Btw type"
+    },
+    "catProd_info_header": "Informatie over het geselecteerde product",
+    "catProd_info_name": "Product",
+    "catProd_info_description": "Beschrijving",
+    "catProd_info_priceExcl": "Prijs (Excl. Btw)",
+    "catProd_info_priceTotal": "Prijs (Incl. Btw)",
+    "prodEdit_noProductSelected": "Er is momenteel geen product geselecteerd, terug keren naar het vorige menu.",
+    "prodEdit": {
+      "Header": "Vul alstublieft in de informatie die u wilt wijzigen, als u een veld leeg laat zal er vanuit gegaan worden dat u het niet wilt wijzigen.",
+      "ResultNoMatch": "Alle informatie die u heeft gegeven komt overeen met de huidige informatie dus er zal geen wijzigingen gedaan worden. Terug keren naar het vorige menu.",
+      "ResultFailure": "Kan het product niet bijwerken, probeer later alstublieft opnieuw. Terug keren naar vorige menu.",
+      "ResultSuccess": "Product is succesvol gewijzigd, Terug keren naar het vorige menu."
+    },
+    "prodRem": {
+      "ResultNoMatch": "Er is geen product geselecteerd, probeer later alstublieft opnieuw. Terug keren naar het vorige menu.",
+      "Question": "Weet u zeker dat u dit product wilt verwijderen?",
+      "ResultFailure": "Kan het product niet verwijderen van de catalogus. Terug keren naar het vorige menu.",
+      "ResultSuccess": "Product is succesvol verwijdert van de catalogus. Terug keren naar de catalogus."
+    },
+    "prodRem_cancel": "Annulering van verwijdering's process. Terug keren naar vorige menu",
+    "ordersMenu_Admin": {
+      "Header": "Dit zijn de huidige inkomende orders",
+      "ResultNoMatch": "Er zijn momenteel geen orders voor u om in te zien, terug keren naar het vorige menu."
+    },
+    "ordersMenu_Customer": {
+      "Header": "Dit zijn de orders die van u zijn",
+      "ResultNoMatch": "Er zijn momenteel geen orders voor u om in te zien, terug keren naar het vorige menu."
+    },
+    "ordersMenu_empty": "Er zijn momenteel geen orders voor u om in te zien, terug keren naar het vorige menu.",
+    "orderDis_user": "Gekocht door",
+    "orderDis_noUser": "Deze order heeft geen user meer verbonden",
+    "orderDis_total": "Totaal",
+    "orderDis_date": "Order datum",
+    "orderDis_products": "Order producten",
+    "cartMenu_total": "Winkelwagen totaal(Incl. Btw)",
+    "cartProd_info_total": "Product totaal",
+    "cartMenu_head": "Winkelwagen:",
+    "cartMenu": {
+      "Header": "Huidige producten in de winkel wagen",
+      "ResultNoMatch": "Er zijn momenteel geen producten in de winkelwagen, terug keren naar het vorige menu."
+    },
+    "addCartProd_count": {
+      "Question": "Hoeveel van dit product wilt u toevoegen?"
+    },
+    "updateCartProd_count": {
+      "Question": "Hoeveel wilt u het aantal naar veranderen?"
+    },
+    "remCartProd": {
+      "Question": "Weet u zeker dat u dit product uit de winkel wagen wilt verwijderen? (Y/N)",
+      "ResultFailure": "Annuleren van verwijdering process, terug keren naar het vorige menu."
+    },
+    "cartProd_addedToExisting": "Het gegeven aantal is toegevoegd aan het al bestaande aantal in de winkel wagen",
+    "cartProd_addedToCart": "Het product is toegevoegd aan de winkel wagen",
+    "cartProd_noProductSelected": "Er is momenteel geen product geselecteerd, probeer alstublieft later opnieuw. Terug keren naar het vorige menu,",
+    "cartProd_info_count": "Product aantal",
+    "cartOrder_error": "Kan geen order Creeëren gebaseerd op de winkel wagen, probeer alstublieft later opnieuw. Terug keren naar het vorige menu.",
+    "cartOrder_success": "Order is succesvol gecreëerd. Terug keren naar het vorige menu.",
+    "order_noOrderSelected": "Er is momenteel geen order geselecteerd, probeer alstublieft later opnieuw. Terug keren naar het vorige menu.",
+    "order_statusFailure": "Er is iets fout gegaan tijdens het updaten van de order status, probeer het later opnieuw. Terug kerne naar het vorige menu.",
+    "order_statusUpdated": "De order status is succesvol geupdate, Terugkeren naar het vorige menu.",
+    "changeLang": {
+      "Header": "Welke taal wilt u naar wijzigen?",
+      "ResultFailure": "Kan momenteel de taal niet wijzigen, probeer later opnieuw.",
+      "ResultSuccess": "De taal is succesvol gewijzigd!"
+    },
+    "en_us": "English (Engels)",
+    "nl_nl": "Nederlands (Actief)"
+  }
+}

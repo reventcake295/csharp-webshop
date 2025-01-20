@@ -1,6 +1,5 @@
 {
   "en_us": {
-    "programLoading": "",
     "programLoaded": "The store has been loaded",
     "Menu_back_option": "Back",
     "Menu_Users_option": "Users",
@@ -29,21 +28,20 @@
     "Menu_AddCartProd_option": "Add product to cart",
     "Menu_CartProdUpdate_option": "Change product count",
     "userAdd_emptyAny": "You did not fill in one of the required fields, returning to previous menu.",
-    "userAdd_permissionCastFailed": "Could not resolve given permission type, returning to previous menu",
-    "userAdd_header": "Please fill in the following prompt for the user information:",
+    "userAdd_header": "Please fill in the following prompts for the user information:",
     "login_header": "Username and password required for login.",
     "default": {
       "Header": "What would you like to do?",
       "Question": "Choose one of the above",
-      "QuestionMaxLoop": "You have too many attempts for this input returning to the previous menu.",
+      "QuestionMaxLoop": "You have too many attempts for this, input returning to the previous menu.",
       "QuestionEmpty": "Please fill in one of the options.",
       "QuestionWrong": "That was not an valid answer, please try again."
     },
     "login_username": {
       "Question": "Username",
-      "QuestionEmpty": "Please fill in your username",
+      "QuestionEmpty": "Please fill in your username.",
       "ResultSuccess": "Successfully logged-in!",
-      "ResultFailure": "Username and/or password wrong, returning to main menu"
+      "ResultFailure": "Username and/or password wrong, returning to main menu."
     },
     "login_password": {
       "Question": "Password",
@@ -119,7 +117,7 @@
     "userChange_header": "You can update the following information of a user, note that leaving the field empty will assume that the current value is to be used.",
     "userChange_noUserSelected": "Could not begin the process of editing because there is no user selected. Returning to previous menu.",
     "userChange_success": "Successfully updated the user!",
-    "userChange_fail0": "Could not update the user please try again later.",
+    "userChange_fail": "Could not update the user please try again later.",
     "userChange_noChange": "No change in the information of the user provided, returning to the previous menu.",
     "userChange_permCurrentUser": "You are currently editing the information of your own account so skipping Permission setting.",
     "catalogMenu_noProducts_admin": "There are currently no products in the catalog.",
@@ -201,9 +199,16 @@
     "cartProd_noProductSelected": "There is no product selected currently, please try again later. Returning to the previous menu.",
     "cartProd_info_count": "Products count",
     "cartOrder_error": "Could not create an order based on the current shopping cart, please try again later. Returning to the previous menu.",
-    "cartOrder_success": "Successfully created the order. Returning to the previous menu."
-  },
-  "order_noOrderSelected": "There is currently no order selected, please try again later. Returning to the previous menu",
-  "order_statusFailure": "Something went wrong while trying to update the order status, please try again later. Returning to the previous menu.",
-  "order_statusUpdated": "Order status has successfully been updated. Returning to the previous menu."
+    "cartOrder_success": "Successfully created the order. Returning to the previous menu.",
+    "order_noOrderSelected": "There is currently no order selected, please try again later. Returning to the previous menu",
+    "order_statusFailure": "Something went wrong while trying to update the order status, please try again later. Returning to the previous menu.",
+    "order_statusUpdated": "Order status has successfully been updated. Returning to the previous menu.",
+    "changeLang": {
+      "Header": "Wich language would you like to change to?",
+      "ResultFailure": "Could not change the language, please try again later.",
+      "ResultSuccess": "Successfully changed the language!"
+    },
+    "en_us": "English (Active)",
+    "nl_nl": "Nederlands (Dutch)"
+  }
 }

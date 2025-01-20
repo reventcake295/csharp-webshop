@@ -9,9 +9,9 @@ internal static class Lang
     private static LangCollection _defaultStrings;
     static Lang()
     {
-        _LangMap = new();
-        _defaultStrings = new("default");
-        _loadLangMap("en_us");
+        _LangMap = new Dictionary<string, LangCollection>();
+        _defaultStrings = new LangCollection("default");
+        _loadLangMap(Settings.Lang);
     }
     
     internal static string GetLangString(string key)
@@ -29,9 +29,17 @@ internal static class Lang
         return _LangMap.ContainsKey(key) && _LangMap[key].HasGroupString();
     }
 
-    internal static void ChangeLang(string lang)
+    internal static bool ChangeLang(string lang)
     {
-        _loadLangMap(lang);
+        try
+        {
+            _loadLangMap(lang);
+        }
+        catch (FileNotFoundException)
+        {
+            return false;
+        }
+        return true;
     }
 
     /// <summary>
@@ -66,6 +74,7 @@ internal static class Lang
         IConfigurationSection dbSection = config.GetRequiredSection(lang);
         // convert it into and IEnumerable for its children and start looping through them
         IEnumerable<IConfigurationSection> strings = dbSection.GetChildren();
+        _LangMap.Clear();
         foreach (IConfigurationSection text in strings)
         {
             // acquire the default lang group and store it separately for usage 
