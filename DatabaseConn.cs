@@ -41,11 +41,7 @@ internal class DatabaseConn
         Task<int> result = GetInstance()._connection.OpenAsync().ContinueWith(_ =>
         {
             command.Connection = GetInstance()._connection;
-            Task<int> result1 = command.ExecuteNonQueryAsync().ContinueWith(task1 =>
-            {
-                GetInstance()._connection.CloseAsync();
-                return task1.Result;
-            });
+            Task<int> result1 = command.ExecuteNonQueryAsync().ContinueWith(task1 => task1.Result);
             return result1.Result;
         });
         return result;

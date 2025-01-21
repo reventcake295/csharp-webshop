@@ -92,7 +92,7 @@
     },
     "userAdd_addressPostal": {
       "Question": "Postcode (6 tekens)",
-      "QuestionEmpty": "Vul alstublieft ene postcode in.",
+      "QuestionEmpty": "Vul alstublieft een postcode in.",
       "QuestionWrong": "De postcode in niet geaccepteerd, de postcode is exact 6 tekens lang. Probeer alstublieft opnieuw."
     },
     "userAdd_addressCity": {
@@ -114,7 +114,7 @@
       "ResultFailure": "Annulering van verwijdering proces, terug keren naar vorige menu."
     },
     "userRem_CouldNotRemoveUser": "Kan gebruiker niet verwijderen, probeer alstublieft later opnieuw. Terug keren naar vorige menu.",
-    "userChange_header": "U kunt de volgende informatie van ene gebruiker wijzigen. Wanneer een veld leeg blijft wordt er vanuit gegaan dat het veld niet veranderd wordt.",
+    "userChange_header": "U kunt de volgende informatie van een gebruiker wijzigen. Wanneer een veld leeg blijft wordt er vanuit gegaan dat het veld niet veranderd wordt.",
     "userChange_noUserSelected": "Kan het process van gebruiker informatie wijzigen niet beginnen omdat er geen gebruiker geselecteerd is. Terug keren naar vorige menu.",
     "userChange_success": "Informatie van gebruiker succesvol gewijzigd!",
     "userChange_fail": "Kan de gebruiker niet bijwerken, probeer alstublieft later opnieuw.",

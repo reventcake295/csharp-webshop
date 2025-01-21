@@ -17,10 +17,10 @@ internal class UiOrderAccept : UiItem
 
         if (!StateHolder.CurrentOrder.UpdateStatus(OrderStatus.Accepted))
         {
-            Console.WriteLine(Lang.GetLangString("order_acceptFailure"));
+            Console.WriteLine(Lang.GetLangString("order_statusFailure"));
             return;
         }
-        Console.WriteLine(Lang.GetLangString("order_accepted"));
+        Console.WriteLine(Lang.GetLangString("order_statusUpdated"));
         StateHolder.UpdateOrders?.Invoke();
         StateHolder.MenuBack = true;
     }

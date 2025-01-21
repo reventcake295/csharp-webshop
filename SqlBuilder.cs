@@ -33,13 +33,13 @@ internal abstract class SqlBuilder
         _batch.BatchCommands.Add(stmt);
     }
     
-
     protected Task<int> ExecCmdAsync()
     { // return the task with the int of affected rows
         return DatabaseConn.ExecuteCommandAsync(_batch).ContinueWith(task =>
         {
+            int result = task.Result;
             CloseConnection();
-            return task.Result;
+            return result;
         });
     }
 

@@ -75,6 +75,8 @@ internal class Products : SqlBuilder
         MySqlDataReader result = ExecQueryAsync().Result;
         // get the wanted results from the query
         bool hasRows = result.HasRows;
+        if (!hasRows) return false;
+        result.Read();
         int productId = result.GetInt32("product_id");
         CloseConnection();
         // create and add the product to the stored array
@@ -140,7 +142,9 @@ internal class Product : SqlBuilder
     
     internal bool Delete()
     {
-        SingleStmt("DELETE FROM Products WHERE product_id = @productId;");
+        StartStmt("DELETE FROM Products WHERE product_id = @productId;");
+        AddArg("@productId", ProductId);
+        EndStmt();
         int result = ExecCmdAsync().Result;
         return result > 0;
     }
