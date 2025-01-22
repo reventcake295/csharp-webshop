@@ -23,7 +23,7 @@ internal class UiRemProd : UiItem
             return;
         }
 
-        if (!Products.GetInstance().RemoveProduct(StateHolder.CurrentProduct.ProductId))
+        if (!Products.Instance.RemoveProduct(StateHolder.CurrentProduct.ProductId))
         {
             Console.WriteLine(Lang.GetLangGroupString("prodRem", Lang.StringType.ResultFailure));
             return;
@@ -34,8 +34,5 @@ internal class UiRemProd : UiItem
         StateHolder.MenuBack = true;
         StateHolder.UpdateCatalog?.Invoke();
     }
-    protected override bool Accessible()
-    {
-        return Session.PermissionRank == Perm.Admin;
-    }
+    protected override bool Accessible() => Session.PermissionRank == Perm.Admin;
 }

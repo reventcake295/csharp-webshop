@@ -20,7 +20,7 @@ internal class UiOrder : UiItem
         StateHolder.CurrentOrder = _order;
         if (_order.CustomerId != 0)
         {
-            Store.User orderUser = Users.GetInstance().GetUserById(_order.CustomerId);
+            Store.User orderUser = Users.Instance.GetUserById(_order.CustomerId);
             Console.WriteLine($"{Lang.GetLangString("orderDis_user")}: {orderUser.Username}");
         }
         else Console.WriteLine($"{Lang.GetLangString("orderDis_noUser")}");

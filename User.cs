@@ -20,23 +20,23 @@ internal class User(
     Perm perm)
     : SqlBuilder
 {
-    public int Id { get; } = id;
+    internal int Id { get; } = id;
     
-    public string Username { get; } = username;
+    internal string Username { get; } = username;
 
-    public Perm PermissionRank { get; private set; } = perm;
+    internal Perm PermissionRank { get; private set; } = perm;
 
-    public string AdresStreet { get; private set; } = adresStreet;
+    internal string AdresStreet { get; private set; } = adresStreet;
 
-    public int AdresNumber { get; private set; } = adresNumber;
+    internal int AdresNumber { get; private set; } = adresNumber;
 
-    public string AdresAdd { get; private set; } = adresAdd;
+    internal string AdresAdd { get; private set; } = adresAdd;
 
-    public string AdresPostal { get; private set; } = adresPostal;
+    internal string AdresPostal { get; private set; } = adresPostal;
 
-    public string AdresCity { get; private set; } = adresCity;
+    internal string AdresCity { get; private set; } = adresCity;
 
-    public string Email { get; private set; } = email;
+    internal string Email { get; private set; } = email;
 
     internal bool EditUser(Perm permissionRank, string adresStreet, int adresNumber, string adresAdd, string adresPostal, string adresCity, string email)
     {
@@ -69,10 +69,10 @@ internal class User(
     
     internal bool RemoveUser()
     {
-        if (Orders.GetInstance().UserHasOrders(Id))
+        if (Orders.Instance.UserHasOrders(Id))
         {
             // remove the user_id from all orders where they are set to the current user to delete
-            StartStmt("UPDATE Orders SET user_id = NULL WHERE user_id = @userId");
+            StartStmt("UPDATE Orders SET user_id = NULL WHERE user_id = @userId;");
             AddArg("@userId", Id);
             EndStmt();
             int orderResult = ExecCmdAsync().Result;
@@ -82,7 +82,7 @@ internal class User(
                 return false;
             }
             // remove the user id from the locally stored orders too
-            foreach (Order userOrder in Orders.GetInstance().GetUserOrders(Id))
+            foreach (Order userOrder in Orders.Instance.GetUserOrders(Id))
                 userOrder.CustomerId = 0;
         }
         // Delete the user itself from the database
@@ -92,9 +92,8 @@ internal class User(
         int userResult = ExecCmdAsync().Result;
         bool deleted = userResult > 0;
         CloseConnection();
-
         
-        Users.GetInstance().RemoveUser(this);
+        Users.Instance.RemoveUser(this);
         
         return deleted;
         // we do not update anything else here that is dependent on the calling function to do
@@ -112,8 +111,8 @@ internal class Users : SqlBuilder
     private Users() => LoadData();
     
     private static Users? _instance;
-    
-    internal static Users GetInstance() => _instance ??= new Users();
+
+    internal static Users Instance => _instance ??= new Users();
     
     private readonly List<User> _users = [];
 

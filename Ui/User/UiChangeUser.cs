@@ -53,8 +53,6 @@ internal class UiChangeUser : UiItem
         if (updatePerm) StateHolder.UpdateUsers?.Invoke();
     }
     
-    protected override bool Accessible()
-    {
-        return Session.PermissionRank == Perm.Admin;
-    }
+    protected override bool Accessible() => Session.PermissionRank == Perm.Admin;
+    
 }

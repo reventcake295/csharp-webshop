@@ -15,7 +15,8 @@ internal class UiLoginLogout : UiItem
                 _login();
                 break;
             case Perm.Customer:
-            case Perm.Admin:_logout();
+            case Perm.Admin:
+                _logout();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(permission.ToString(), "Given permission value is invalid");

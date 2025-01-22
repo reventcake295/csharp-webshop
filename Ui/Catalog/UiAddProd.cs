@@ -37,7 +37,7 @@ internal class UiAddProd : UiItem
                                   optional:true, choices:Taxes.TaxTypes.Keys.ToList())) return;
         Taxes taxes = Taxes.TaxTypes[taxesId];
         
-        if (!Products.GetInstance().AddProduct(productName, productDescription, moneyType, productPrice, taxes))
+        if (!Products.Instance.AddProduct(productName, productDescription, moneyType, productPrice, taxes))
         {
             Console.WriteLine(Lang.GetLangGroupString("prodAdd", Lang.StringType.ResultFailure));
             return;
@@ -48,8 +48,6 @@ internal class UiAddProd : UiItem
         StateHolder.UpdateCatalog?.Invoke();
     }
 
-    protected override bool Accessible()
-    {
-        return Session.PermissionRank == Perm.Admin;
-    }
+    protected override bool Accessible() => Session.PermissionRank == Perm.Admin;
+    
 }

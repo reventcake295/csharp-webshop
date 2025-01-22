@@ -7,8 +7,9 @@ internal class Products : SqlBuilder
     private Products() => LoadData();
     
     private static Products? _instance;
-    internal static Products GetInstance() => _instance ??= new Products();
 
+    internal static Products Instance => _instance ??= new Products();
+    
     private readonly List<Product> _products = [];
     protected sealed override void LoadData()
     {
@@ -56,10 +57,7 @@ internal class Products : SqlBuilder
         CloseConnection();
     }
 
-    internal List<Product> GetAllProducts()
-    {
-        return _products;
-    }
+    internal List<Product> GetAllProducts() => _products;
     
     internal Product? GetProductById(int id) => _products.Find(product => product.ProductId == id);
     
@@ -142,7 +140,7 @@ internal class Product : SqlBuilder
     
     internal bool Delete()
     {
-        StartStmt("DELETE FROM Products WHERE product_id = @productId;");
+        StartStmt("DELETE FROM Products WHERE product_id = @productId AND NOT EXISTS( SELECT order_product_id FROM orderProducts WHERE product_id = @productId);");
         AddArg("@productId", ProductId);
         EndStmt();
         int result = ExecCmdAsync().Result;

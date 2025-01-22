@@ -16,7 +16,7 @@ internal class DatabaseConn
     /// Get the instance of the class or create the instance if not done before
     /// </summary>
     /// <returns>The class instance</returns>
-    internal static DatabaseConn GetInstance() => _instance ??= new DatabaseConn();
+    private static DatabaseConn GetInstance() => _instance ??= new DatabaseConn();
 
     private DatabaseConn()
     {

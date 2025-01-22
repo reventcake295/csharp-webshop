@@ -151,19 +151,12 @@ internal static class UiHelper
         return input;
     }
 
-    internal static void DisplayResult(string questId, Lang.StringType stringType)
-    {
-        Console.WriteLine(Lang.GetSpecificOrDefaultString(questId, stringType));
-    }
-    internal static void DisplayOption(string key, string value)
-    {
-        Console.WriteLine($"    {key}: {Lang.GetLangString(value)}");
-    }
+    internal static void DisplayResult(string questId, Lang.StringType stringType) => Console.WriteLine(Lang.GetSpecificOrDefaultString(questId, stringType));
+    
+    internal static void DisplayOption(string key, string value) => Console.WriteLine($"    {key}: {Lang.GetLangString(value)}");
 
-    internal static void DisplayCustomOption(string key, string value)
-    {
-        Console.WriteLine($"    {key}: {value}");
-    }
+    internal static void DisplayCustomOption(string key, string value) => Console.WriteLine($"    {key}: {value}");
+    
 
     internal static void DisplayMenu(Dictionary<string, UiItem> menu, string menuId)
     {

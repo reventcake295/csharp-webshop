@@ -56,8 +56,8 @@ internal class UiOrders : UiItem
         // and there is a throwaway arm present, so it's a moot point
         IEnumerable<Store.Order> orders = menuType switch
         {
-            Perm.Admin    => Orders.GetInstance().GetIncomingOrders(),
-            Perm.Customer => Orders.GetInstance().GetUserOrders(Session.Id),
+            Perm.Admin    => Orders.Instance.GetIncomingOrders(),
+            Perm.Customer => Orders.Instance.GetUserOrders(Session.Id),
             _             => []
         };
         int key = 0;
@@ -69,7 +69,7 @@ internal class UiOrders : UiItem
     }
     
     protected override bool Accessible() => Session.PermissionRank is Perm.Admin or Perm.Customer 
-                                            && Orders.GetInstance().HasOrders(Session.Id);
+                                            && Orders.Instance.HasOrders(Session.Id);
 
     protected override bool Accessible(out Perm key)
     {

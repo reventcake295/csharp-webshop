@@ -12,7 +12,8 @@ class Program
         // load the standard data
         Taxes.LoadTaxes();
         Money.LoadMoney();
-        Products.GetInstance();
+        // I know this is weird 
+        Products prods = Products.Instance;
         
         Console.WriteLine(Lang.GetLangString("programLoaded"));
         new Ui.Ui().Run();

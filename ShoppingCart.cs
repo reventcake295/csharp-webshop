@@ -4,8 +4,9 @@ internal class ShoppingCart : SqlBuilder
 {
     private ShoppingCart() { }
     private static ShoppingCart? _instance;
-    internal static ShoppingCart GetInstance() => _instance ??= new ShoppingCart();
-    
+
+    internal static ShoppingCart Instance => _instance ??= new ShoppingCart();
+
     private readonly List<OrderProduct> _orderProducts = [];
 
     internal Money DisplayFormat { get; set; } = Settings.DefaultMoney;
@@ -36,7 +37,7 @@ internal class ShoppingCart : SqlBuilder
     internal bool CreateOrder(out Order? order)
     {
         order = null;
-        Order? possibleOrder = Orders.GetInstance().GenerateOrder(_orderProducts, TotalPrice, DisplayFormat);
+        Order? possibleOrder = Orders.Instance.GenerateOrder(_orderProducts, TotalPrice, DisplayFormat);
         if (possibleOrder == null) return false;
         order = possibleOrder;
         // order successfully created clearing cart and returning true

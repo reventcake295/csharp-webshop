@@ -14,7 +14,7 @@ internal class UiAddUser : UiItem
         if (!Accessible()) return;
         Console.WriteLine(Lang.GetLangString("userAdd_header"));
         if (!UiHelper.AskQuestion("userAdd_user", out string username, "")) return;
-        if (!string.IsNullOrWhiteSpace(username) && Users.GetInstance().UserExists(username))
+        if (!string.IsNullOrWhiteSpace(username) && Users.Instance.UserExists(username))
         {
             Console.WriteLine(Lang.GetLangGroupString("userAdd_user", Lang.StringType.QuestionWrong));
             return;
@@ -44,7 +44,7 @@ internal class UiAddUser : UiItem
         // due to the way this is handled by the user class to add the user, there are cases that will throw exceptions for us to handle
         try
         {
-            if (!Users.GetInstance().AddUser(username, password, permissionRank, adresStreet, adresNumber, adresAdd, adresPostal,
+            if (!Users.Instance.AddUser(username, password, permissionRank, adresStreet, adresNumber, adresAdd, adresPostal,
                                     adresCity,
                                     email))
             {
@@ -66,8 +66,5 @@ internal class UiAddUser : UiItem
         
     } 
     
-    protected override bool Accessible()
-    {
-        return Session.PermissionRank == Perm.Admin;
-    }
+    protected override bool Accessible() => Session.PermissionRank == Perm.Admin;
 }

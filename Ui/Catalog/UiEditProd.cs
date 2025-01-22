@@ -64,8 +64,5 @@ internal class UiEditProd : UiItem
         // do not update the product catalog because the current product is already updated
     }
     
-    protected override bool Accessible()
-    {
-        return Session.PermissionRank == Perm.Admin;
-    }
+    protected override bool Accessible() => Session.PermissionRank == Perm.Admin;
 }

@@ -32,7 +32,7 @@ internal class UiUsers : UiItem
     {
         // clear the current items list and gather the user's list anew
         SubMenu.Clear();
-        List<Store.User> users = Users.GetInstance().GetAllUsers();
+        List<Store.User> users = Users.Instance.GetAllUsers();
         // add the users to the SubMenu list
         for (int i = 0; i < users.Count; i++)
             SubMenu.Add((i + 1).ToString(), new UiUser(users[i]));

@@ -5,7 +5,7 @@ namespace Store;
 internal class Session : SqlBuilder
 {
     internal static int Id { get; private set; }
-    public static string? Username { get; private set; }
+    internal static string? Username { get; private set; }
     
     internal static Perm PermissionRank { get; private set; }
 
@@ -14,7 +14,7 @@ internal class Session : SqlBuilder
     {
         get
         {
-            return _user ??= Users.GetInstance().GetUserById(Id);
+            return _user ??= Users.Instance.GetUserById(Id);
         }
     }
     private Session()

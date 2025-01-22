@@ -5,10 +5,10 @@ namespace Store;
 
 internal class Money : SqlBuilder
 {
-    public static Dictionary<int, Money> MoneyTypes { get; private set; } = [];
+    internal static Dictionary<int, Money> MoneyTypes { get; private set; } = [];
     
     public int Id { get; set; }
-    public string Currency { get; set; } = string.Empty;
+    internal string Currency { get; set; } = string.Empty;
     private string Format { get; set; } =  string.Empty;
 
     private Money(int id, string currency, string format)

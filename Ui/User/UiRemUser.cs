@@ -24,7 +24,7 @@ internal class UiRemUser: UiItem
         }
 
         // if the user that is to be deleted has incoming orders, then we need to have confirmation that the user needs to be deleted
-        if (Orders.GetInstance().UserHasOrders(StateHolder.CurrentUser.Id, OrderStatus.Incoming))
+        if (Orders.Instance.UserHasOrders(StateHolder.CurrentUser.Id, OrderStatus.Incoming))
         { // the user has at least one incoming order attached, so we need to ensure that the admin is certain that they wish to delete it,
             // and yes, the option needs to be available due to AVG and other such laws
             if (!UiHelper.AskQuestion("userRem_userIncomingOrders", out bool orderAnswer, false)) return;

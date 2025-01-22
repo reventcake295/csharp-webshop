@@ -4,7 +4,7 @@ namespace Store;
 
 internal class Taxes : SqlBuilder
 {
-    public static Dictionary<int, Taxes> TaxTypes { get; private set; } = [];
+    internal static Dictionary<int, Taxes> TaxTypes { get; private set; } = [];
     
     internal int Id { get; set; }
     internal int TaxRate { get; set; }

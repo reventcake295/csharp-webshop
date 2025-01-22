@@ -25,7 +25,7 @@ internal class OrderProduct
         ProductPrice = productPrice;
         Taxes = taxes;
         Money = money;
-        Product? product = Products.GetInstance().GetProductById(productId);
+        Product? product = Products.Instance.GetProductById(productId);
         Product = product ?? throw new NullReferenceException("Product not found");
     }
 

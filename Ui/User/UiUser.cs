@@ -41,8 +41,5 @@ internal class UiUser : UiItem
         StateHolder.CurrentUser = null;
     }
     
-    protected override bool Accessible()
-    {
-        return Session.PermissionRank == Perm.Admin;
-    }
+    protected override bool Accessible() => Session.PermissionRank == Perm.Admin;
 }

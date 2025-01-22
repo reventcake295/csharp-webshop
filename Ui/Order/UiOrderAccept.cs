@@ -25,8 +25,5 @@ internal class UiOrderAccept : UiItem
         StateHolder.MenuBack = true;
     }
 
-    protected override bool Accessible()
-    {
-        return Session.PermissionRank == Perm.Admin;
-    }
+    protected override bool Accessible() => Session.PermissionRank == Perm.Admin;
 }

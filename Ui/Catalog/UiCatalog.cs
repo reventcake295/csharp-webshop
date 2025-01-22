@@ -41,7 +41,7 @@ internal class UiCatalog : UiItem
     {
         // clear the current items list and gather the product's list anew
         SubMenu.Clear();
-        List<Product> products = Products.GetInstance().GetAllProducts();
+        List<Product> products = Products.Instance.GetAllProducts();
         // add the products to the SubMenu list
         for (int i = 0; i < products.Count; i++)
             SubMenu.Add((i + 1).ToString(), new UiCatalogProd(products[i]));

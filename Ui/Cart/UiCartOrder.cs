@@ -9,7 +9,7 @@ internal class UiCartOrder : UiItem
     internal override void Execute()
     {
         if (!Accessible()) return;
-        if (!ShoppingCart.GetInstance().CreateOrder(out _))
+        if (!ShoppingCart.Instance.CreateOrder(out _))
         {
             Console.WriteLine(Lang.GetLangString("cartOrder_error"));
             return;
@@ -22,8 +22,5 @@ internal class UiCartOrder : UiItem
         StateHolder.UpdateOrders?.Invoke();
     }
 
-    protected override bool Accessible()
-    {
-        return Session.PermissionRank == Perm.Customer;
-    }
+    protected override bool Accessible() => Session.PermissionRank == Perm.Customer;
 }

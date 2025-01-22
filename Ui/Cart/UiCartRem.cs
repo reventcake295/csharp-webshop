@@ -24,7 +24,7 @@ internal class UiCartRem : UiItem
             return;
         }
         // Add the product as an OrderProduct to the shopping cart
-        ShoppingCart.GetInstance().RemoveProduct(StateHolder.CurrentOrderProduct);
+        ShoppingCart.Instance.RemoveProduct(StateHolder.CurrentOrderProduct);
         // update the shopping cart if necessary
         // to ensure that when the user visits it again, the product is no longer visible
         StateHolder.UpdateShoppingCart?.Invoke();

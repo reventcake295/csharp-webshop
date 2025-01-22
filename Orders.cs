@@ -5,7 +5,11 @@ namespace Store;
 internal class Orders : SqlBuilder
 {
     private readonly List<Order> _orders = [];
-
+    
+    private static Orders? _instance;
+    
+    internal static Orders Instance => _instance ??= new Orders();
+    
     // do a direct method call instead of bothering with a full function body, it's only a single line anyway
     internal IEnumerable<Order> GetUserOrders(int userId) => _orders.Where(o => o.CustomerId == userId);
     
@@ -13,7 +17,7 @@ internal class Orders : SqlBuilder
     
     protected sealed override void LoadData()
     {
-        SingleStmt("SELECT order_id, statusId, order_date, orderTotal, money_id, user_id FROM Orders");
+        SingleStmt("SELECT order_id, statusId, order_date, orderTotal, money_id, user_id FROM Orders;");
         MySqlDataReader result = ExecQueryAsync().Result;
         while (result.Read())
         {
@@ -33,9 +37,6 @@ internal class Orders : SqlBuilder
         CloseConnection();
     }
 
-    internal static Orders GetInstance() => _instance ??= new Orders();
-    
-    private static Orders? _instance;
 
     private Orders() => LoadData();
     
@@ -142,7 +143,7 @@ internal class Order : SqlBuilder
 
     protected override void LoadData()
     {
-        StartStmt("SELECT order_product_id, product_id, pcsPrice, count, total, money_id, taxes_id FROM orderProducts oP WHERE oP.order_id = @orderId;");
+        StartStmt("SELECT order_product_id, product_id, pcsPrice, count, total, money_id, taxes_id FROM orderProducts WHERE order_id = @orderId;");
         AddArg("@orderId", OrderId);
         EndStmt();
         MySqlDataReader result = ExecQueryAsync().Result;

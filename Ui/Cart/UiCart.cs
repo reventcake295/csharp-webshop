@@ -36,17 +36,17 @@ internal class UiCart : UiItem
     internal override void DisplayMenu(string menuName = "default")
     {
         Console.WriteLine(Lang.GetLangString("cartMenu_head"));
-        Console.WriteLine($"{Lang.GetLangString("cartMenu_total")}: {ShoppingCart.GetInstance().DisplayFormat.FormatPrice(ShoppingCart.GetInstance().TotalPrice)}");
+        Console.WriteLine($"{Lang.GetLangString("cartMenu_total")}: {ShoppingCart.Instance.DisplayFormat.FormatPrice(ShoppingCart.Instance.TotalPrice)}");
         base.DisplayMenu(menuName);
     }
 
     protected override bool Accessible() => Session.PermissionRank == Perm.Customer 
-                                            && ShoppingCart.GetInstance().HasItems();
+                                            && ShoppingCart.Instance.HasItems();
     
     private void LoadCart()
     {
         SubMenu.Clear();
-        List<OrderProduct> products = ShoppingCart.GetInstance().GetList();
+        List<OrderProduct> products = ShoppingCart.Instance.GetList();
         for (int i = 0; i < products.Count; i++)
             SubMenu.Add((i + 1).ToString(), new UiCartProd(products[i]));
         

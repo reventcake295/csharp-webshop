@@ -24,20 +24,15 @@
 ### system background workings:
 - retrieve settings
   - ```sql
-    SELECT DefaultLang, AvailableLangs, MaxInputLoop FROM capstoneStore.Settings;
+    SELECT DefaultLang, AvailableLangs, MaxInputLoop, DefaultMoney, DefaultTaxes FROM capstoneStore.Settings;
     ```
-- check if a user exists by returning the number of rows that has a given username 
+- Remove user_id from orders where the user id is present 
   - ```sql
-    SELECT count(*) AS userCount FROM users WHERE username=@username;
-    ```
-- check if a user exists with a username, then return the required information for processing
-  - ```sql
-    SELECT count(*) AS userCount, password, user_id, auth_id FROM users
-    WHERE username=@username;
+    UPDATE Orders SET user_id = NULL WHERE user_id = @userId;
     ```
 - load all users
   - ```sql
-    SELECT user_id, username, email, adres_street, adres_number, adres_add, adres_postal, adres_city, auth_id
+    SELECT user_id, username, email, adres_street, adres_number, adres_add, adres_postal, adres_city, auth_id 
     FROM users;
     ```
 - load the tax's data
@@ -51,39 +46,25 @@
 ### user requirements:
 - As a user, I want to see the entire product catalog.
   - ```sql
-    SELECT P.product_id, P.name, P.description, P.price, M.name, M.displayFormat, T.name, T.percent, P.money_id, P.taxes_id 
-    FROM Products P 
-    JOIN Taxes T ON T.taxes_id = P.taxes_id 
-    JOIN Money M ON M.money_id = P.money_id;
+    SELECT product_id, name, description, price, money_id, taxes_id 
+    FROM Products;
     ```
-- As a customer, I want to see the status of my order.
-  - general overview of orders, of a specific user:
-    ```sql
-    SELECT O.order_id, O.statusId, O.order_date, O.orderTotal, M.displayFormat 
-    FROM Orders O
-    WHERE O.user_id=@userId;
-    ```
-    specific order selects:
-    ```sql
-    SELECT P.name, P.description, oP.pcsPrice, oP.count, oP.total, M.name, M.displayFormat, T.name, T.percent, P.money_id, P.taxes_id 
-    FROM orderProducts oP
-    JOIN Products P ON oP.product_id = P.product_id 
-    WHERE oP.order_id = @orderId; 
+- Load specific product from the database
+  - ```sql
+    SELECT product_id, name, description, price, money_id, taxes_id FROM Products WHERE product_id = @id;
     ```
 - As an administrator, I want to see all incoming orders.
-  - General overview of incoming orders
+- As a customer, I want to see the status of my order.
+  - General overview of all orders (filtering of orders happens app side)
     ```sql
-    SELECT O.statusId, O.order_date, O.orderTotal
-    FROM Orders O;
+    SELECT order_id, statusId, order_date, orderTotal, money_id, user_id 
+    FROM Orders;
     ```
-    specific order selects:
+  - specific orderProduct select:
     ```sql
-    SELECT P.name, P.description, oP.pcsPrice, oP.count, oP.total, M.name, M.displayFormat, T.name, T.percent, P.money_id, P.taxes_id 
-    FROM orderProducts oP 
-    JOIN Taxes T ON T.taxes_id = oP.taxes_id 
-    JOIN Money M ON M.money_id = oP.money_id 
-    JOIN Products P ON oP.product_id = P.product_id 
-    WHERE oP.order_id = @orderId; 
+    SELECT order_product_id, product_id, pcsPrice, count, total, money_id, taxes_id 
+    FROM orderProducts 
+    WHERE order_id = @orderId;
     ```
 ## Application -> Database
 ### system background workings:
@@ -93,13 +74,15 @@
     ```
 - add a user to the database
   - ```sql
-    INSERT INTO users (username, password, email, adres_street, adres_number, adres_add, adres_postal, adres_city, auth_id) 
-    VALUES (@username, @password, @email, @adresStreet, @adresNumber, @adresAdd, @adresPostal, @adresCity, @authId)
+    INSERT INTO users 
+    (username, password, email, adres_street, adres_number, adres_add, adres_postal, adres_city, auth_id) 
+    VALUES (@username, @password, @email, @adresStreet, @adresNumber, @adresAdd, @adresPostal, @adresCity, @authId) 
+    RETURNING user_id;
     ```
 - update user in the database
   - ```sql
     UPDATE users 
-    SET username=@username, password=@password, email=@email, adres_street=@adresStreet, adres_number=@adresNumber, adres_add=@adresAdd, adres_postal=@adresPostal, adres_city=@adresCity, auth_id=@authId
+    SET email=@email, adres_street=@adresStreet, adres_number=@adresNumber, adres_add=@adresAdd, adres_postal=@adresPostal, adres_city=@adresCity, auth_id=@authId 
     WHERE user_id = @userId;
     ```
 - add a new taxes type
@@ -135,20 +118,22 @@
 ### User requirements:
 - As an administrator, I want to add a product to my product catalog.
   - ```sql
-    INSERT INTO Products (name, description, money_id, taxes_id, price) 
-    VALUES (@productName, @productDescription, @productMoneyId, @productTaxesId, @productPrice);
+    INSERT INTO Products 
+    (name, description, money_id, taxes_id, price) 
+    VALUES (@productName, @productDescription, @productMoneyId, @productTaxesId, @productPrice) 
+    RETURNING product_id;
     ```
 - As an administrator, I want to edit a product in my product catalog.
   - ```sql
     UPDATE Products 
-    SET money_id=@productMoneyId, taxes_id=@productTaxesId, name=@productName, description=@productDescription, price=@productPrice
+    SET money_id=@productMoneyId, taxes_id=@productTaxesId, name=@productName, description=@productDescription, price=@productPrice 
     WHERE product_id = @productId;
     ```
 - As an administrator, I want to delete a product in my product catalog.
   - ```sql
-    DELETE FROM Products WHERE product_id = @productId 
+    DELETE FROM Products WHERE product_id = @productId
     AND NOT EXISTS(
-        SELECT COUNT(*) FROM orderProducts 
+        SELECT order_product_id FROM orderProducts 
         WHERE product_id = @productId
     );
     ```
@@ -157,22 +142,21 @@
     do note that the product insertion is done with one insertion, but the value rows are dynamically inserted 
     before the values are put in via the parameters; 
     this means that only the number belonging to the current inserted row is put in via a string builder
-    
     ```sql
     INSERT INTO Orders (user_id, order_date, statusId, orderTotal, money_id)
-    VALUES (@userId, @orderDate, @orderStatusId, @orderTotal, @orderMoneyId) RETURNING @_process_OrderId = order_id;
+    VALUES (@userId, @orderDate, @orderStatusId, @orderTotal, @orderMoneyId);
+    SELECT LAST_INSERT_ID() INTO @_process_orderId;
     INSERT INTO orderProducts (order_id, product_id, taxes_id, money_id, count, pcsPrice, total)
     VALUES
     (@_process_OrderId, @orderProductId1, @productTaxesId1, @productMoneyId1, @productCount1, @productPcsPrice1, @productTotal1),
     (@_process_OrderId, @orderProductId2, @productTaxesId2, @productMoneyId2, @productCount2, @productPcsPrice2, @productTotal2),
     (@_process_OrderId, @orderProductId3, @productTaxesId3, @productMoneyId3, @productCount3, @productPcsPrice3, @productTotal3);
     # ...;
+    SELECT @_process_orderId;
     ```
 - As an administrator, I want to complete an incoming order.
-  - ```sql
-    UPDATE Orders SET statusId=@newStatusId WHERE order_id = @orderId;
-    ```
 - As an administrator, I want to reject an incoming order.
-  - ```sql
+  - uses the same update statement just uses a different value sourced from the enum class
+    ```sql
     UPDATE Orders SET statusId=@newStatusId WHERE order_id = @orderId;
     ```

@@ -28,14 +28,10 @@ internal class Ui
     internal void Run()
     {
         while (!ShuttingDown)
-        {
             UiHelper.DisplayMenu(_menuMap, "mainMenu");
-        }
     }
 
-    internal static void Shutdown()
-    {
-        ShuttingDown = true;
-    }
+    internal static void Shutdown() => ShuttingDown = true;
+    
     
 }
