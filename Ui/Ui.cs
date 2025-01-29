@@ -8,22 +8,18 @@ namespace Store.Ui;
 
 internal class Ui
 {
-    private readonly Dictionary<string, UiItem> _menuMap = new();
+    private readonly Dictionary<string, UiItem> _menuMap = new()
+        { 
+            {"1", new UiCatalog()},
+            {"2", new UiCart()},
+            {"3", new UiOrders()},
+            {"4", new UiUsers()},
+            {"7", new UiLoginLogout()},
+            {"8", new UiChangeLang()},
+            {"9", new UiExit()},
+        };
     
     internal static bool ShuttingDown { get; private set; }
-
-    internal Ui()
-    {
-        // somehow the chaining of the .Add methods doesn't work,
-        // so we do the adding in sequence and reference the map each time
-        _menuMap.Add("1", new UiCatalog());
-        _menuMap.Add("2", new UiCart());
-        _menuMap.Add("3", new UiOrders());
-        _menuMap.Add("4", new UiUsers());
-        _menuMap.Add("7", new UiLoginLogout());
-        _menuMap.Add("8", new UiChangeLang());
-        _menuMap.Add("9", new UiExit());
-    }
 
     internal void Run()
     {

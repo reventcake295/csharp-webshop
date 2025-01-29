@@ -2,7 +2,7 @@ using Store.Ui.Util;
 
 namespace Store.Ui.Catalog;
 
-internal class UiCatalog : UiItem
+internal class UiCatalog : UiMenu
 {
     /// <summary>
     /// The items that are always present in the menu,
@@ -41,7 +41,7 @@ internal class UiCatalog : UiItem
     {
         // clear the current items list and gather the product's list anew
         SubMenu.Clear();
-        List<Product> products = Products.Instance.GetAllProducts();
+        List<Product> products = Products.Instance.GetValues();
         // add the products to the SubMenu list
         for (int i = 0; i < products.Count; i++)
             SubMenu.Add((i + 1).ToString(), new UiCatalogProd(products[i]));

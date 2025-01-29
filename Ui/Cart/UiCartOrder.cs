@@ -2,10 +2,8 @@ namespace Store.Ui.Cart;
 
 internal class UiCartOrder : UiItem
 {
-    internal UiCartOrder()
-    {
-        NameId = "Menu_CartOrder_option";
-    }
+    internal UiCartOrder() => NameId = "Menu_CartOrder_option";
+    
     internal override void Execute()
     {
         if (!Accessible()) return;

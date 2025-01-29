@@ -14,20 +14,11 @@ internal static class Lang
         _loadLangMap(Settings.Lang);
     }
     
-    internal static string GetLangString(string key)
-    {
-        return _LangMap.TryGetValue(key, out LangCollection? result) ? result.GetString() : "";
-    }
+    internal static string GetLangString(string key) => _LangMap.TryGetValue(key, out LangCollection? result) ? result.GetString() : "";
 
-    internal static string GetLangGroupString(string key, StringType stringType)
-    {
-        return _LangMap.TryGetValue(key, out LangCollection? result) ? result.GetGroupString(stringType) : "";
-    }
+    internal static string GetLangGroupString(string key, StringType stringType) => _LangMap.TryGetValue(key, out LangCollection? result) ? result.GetGroupString(stringType) : "";
 
-    private static bool LangGroupExists(string key)
-    {
-        return _LangMap.ContainsKey(key) && _LangMap[key].HasGroupString();
-    }
+    private static bool LangGroupExists(string key) => _LangMap.ContainsKey(key) && _LangMap[key].HasGroupString();
 
     internal static bool ChangeLang(string lang)
     {
@@ -104,22 +95,13 @@ internal static class Lang
         private readonly string? _langString;
         private readonly Dictionary<StringType, LangCollection> _stringGroup = new();
 
-        internal string GetString()
-        {
-            return _langString ?? "";
-        }
+        internal string GetString() => _langString ?? "";
 
-        internal string GetGroupString(StringType stringType)
-        {
-            return _stringGroup.TryGetValue(stringType, out LangCollection? groupString) ? groupString.GetString() : "";
-        }
+        internal string GetGroupString(StringType stringType) => _stringGroup.TryGetValue(stringType, out LangCollection? groupString) ? groupString.GetString() : "";
         
         internal bool HasGroupString() => _stringGroup.Count != 0;
         
-        internal LangCollection(string text)
-        {
-            _langString = text;
-        }
+        internal LangCollection(string text) => _langString = text;
 
         internal LangCollection(IEnumerable<IConfigurationSection> section)
         {

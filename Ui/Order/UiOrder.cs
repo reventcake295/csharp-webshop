@@ -2,7 +2,7 @@ using Store.Ui.Util;
 
 namespace Store.Ui.Order;
 
-internal class UiOrder : UiItem
+internal class UiOrder : UiMenu
 {
     private readonly Store.Order _order;
     
@@ -20,7 +20,7 @@ internal class UiOrder : UiItem
         StateHolder.CurrentOrder = _order;
         if (_order.CustomerId != 0)
         {
-            Store.User orderUser = Users.Instance.GetUserById(_order.CustomerId);
+            Store.User orderUser = Users.Instance.Get(_order.CustomerId);
             Console.WriteLine($"{Lang.GetLangString("orderDis_user")}: {orderUser.Username}");
         }
         else Console.WriteLine($"{Lang.GetLangString("orderDis_noUser")}");
@@ -48,7 +48,7 @@ internal class UiOrder : UiItem
     
     /// <summary>
     /// Checks to see if the current user has access to the UiItem.
-    /// In case of a customer a further check if performed to see if the order has the same userId
+    /// In the case of a customer, a further check if performed to see if the order has the same userId
     /// </summary>
     /// <returns></returns>
     protected override bool Accessible() => Session.PermissionRank switch

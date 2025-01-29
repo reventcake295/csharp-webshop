@@ -2,19 +2,12 @@ using MySqlConnector;
 
 namespace Store;
 
-internal class Orders : SqlBuilder
+internal class Orders : Collectible<Order>
 {
-    private readonly List<Order> _orders = [];
     
     private static Orders? _instance;
-    
     internal static Orders Instance => _instance ??= new Orders();
-    
-    // do a direct method call instead of bothering with a full function body, it's only a single line anyway
-    internal IEnumerable<Order> GetUserOrders(int userId) => _orders.Where(o => o.CustomerId == userId);
-    
-    internal IEnumerable<Order> GetIncomingOrders() => _orders.Where(o => o.Status == OrderStatus.Incoming);
-    
+    private Orders() => LoadData();
     protected sealed override void LoadData()
     {
         SingleStmt("SELECT order_id, statusId, order_date, orderTotal, money_id, user_id FROM Orders;");
@@ -29,20 +22,22 @@ internal class Orders : SqlBuilder
                 (OrderStatus)result.GetInt32("statusId"),
                 result.GetDateTime("order_date"),
                 result.GetDecimal("orderTotal"),
-                Money.MoneyTypes[result.GetInt32("money_id")],
+                Money.Instance.Get(result.GetInt32("money_id")),
                 userId
-                );
-            _orders.Add(o);
+            );
+            Collectibles.Add(o.OrderId, o);
         }
         CloseConnection();
     }
-
-
-    private Orders() => LoadData();
+    
+    // do a direct method call instead of bothering with a full function body, it's only a single line anyway
+    internal IEnumerable<Order> GetUserOrders(int userId) => GetValues().Where(o => o.CustomerId == userId);
+    
+    internal IEnumerable<Order> GetIncomingOrders() => GetValues().Where(o => o.Status == OrderStatus.Incoming);
     
     internal bool UserHasOrders(int userId, OrderStatus? status = null) => status.HasValue ? 
-               _orders.Any(order => order.Status == status && order.CustomerId == userId) 
-               : _orders.Any(order => order.CustomerId == userId);
+               Collectibles.Any(order => order.Value.Status == status && order.Value.CustomerId == userId) 
+               : Collectibles.Any(order => order.Value.CustomerId == userId);
     // ensure that only when the order status is set that the statusId param is also given
     // and then use LINQ to see if there is an order with that
 
@@ -91,7 +86,7 @@ internal class Orders : SqlBuilder
         CloseConnection();
         
         Order order = new(orderId, OrderStatus.Incoming, DateTime.Now, total, money, Session.Id);
-        _orders.Add(order);
+        Collectibles.Add(orderId, order);
         return order;
     }
 
@@ -102,84 +97,4 @@ internal class Orders : SqlBuilder
         Perm.Customer => GetUserOrders(id).Any(),
         _ => false
     };
-}
-
-internal class Order : SqlBuilder
-{
-    internal int OrderId { get; set; }
-    
-    internal DateTime OrderDate { get; set; }
-    
-    internal int CustomerId { get; set; }
-    
-    internal decimal OrderTotal { get; set; }
-    
-    internal Money MoneyType { get; set; }
-    
-    internal OrderStatus Status { get; private set; }
-
-    private readonly List<OrderProduct> _products = [];
-    internal List<OrderProduct> Products
-    {
-        get
-        {
-            // this may seem weird, but this is placed here to ensure that when the products get accessed,
-            // the products are loaded in
-            if (_products.Count == 0) LoadData();
-            // if the products list is still empty, then forward the empty list
-            // either it is by design or something went wrong
-            return _products;
-        }
-    }
-    internal Order(int orderId, OrderStatus status, DateTime orderDate, decimal orderTotal, Money moneyType, int userId)
-    {
-        OrderId = orderId;
-        OrderDate = orderDate;
-        OrderTotal = orderTotal;
-        MoneyType = moneyType;
-        Status = status;
-        CustomerId = userId;
-    }
-
-    protected override void LoadData()
-    {
-        StartStmt("SELECT order_product_id, product_id, pcsPrice, count, total, money_id, taxes_id FROM orderProducts WHERE order_id = @orderId;");
-        AddArg("@orderId", OrderId);
-        EndStmt();
-        MySqlDataReader result = ExecQueryAsync().Result;
-
-        while (result.Read())
-        {
-            OrderProduct orderProduct = new(
-                result.GetInt32("order_product_id"),
-                OrderId,
-                result.GetInt32("count"),
-                result.GetInt32("product_id"),
-                result.GetDecimal("pcsPrice"), Taxes.TaxTypes[result.GetInt32("taxes_id")], Money.MoneyTypes[result.GetInt32("money_id")]
-            );
-            _products.Add(orderProduct);
-        }
-        CloseConnection();
-    }
-
-    public bool UpdateStatus(OrderStatus newStatus)
-    {
-        StartStmt("UPDATE Orders SET statusId=@newStatusId WHERE order_id = @orderId;");
-        AddArg("@newStatusId", (int)newStatus);
-        AddArg("@orderId", OrderId);
-        EndStmt();
-        // don't bother getting the result into an int;
-        // it is just to see if the update was successful or not
-        bool result = ExecCmdAsync().Result > 0;
-        if (result) Status = newStatus;
-        return result;
-    }
-    
-}
-
-internal enum OrderStatus
-{
-    Incoming = 0,
-    Accepted = 1,
-    Rejected = 2,
 }

@@ -34,13 +34,7 @@ internal static class UiHelper
             }
             if (!caseSensitive) response = response.ToLower();
             // because they are optional parameters, there must also be a test if they are not set to 0 alongside the lenght check
-            if (min != 0 && !(response.Length >= min))
-            {
-                Console.WriteLine(Lang.GetSpecificOrDefaultString(questId, Lang.StringType.QuestionWrong));
-                continue;
-            }
-
-            if (max != 0 && !(response.Length <= max))
+            if ((min != 0 && !(response.Length >= min)) || (max != 0 && !(response.Length <= max)))
             {
                 Console.WriteLine(Lang.GetSpecificOrDefaultString(questId, Lang.StringType.QuestionWrong));
                 continue;
@@ -100,20 +94,17 @@ internal static class UiHelper
                 Console.WriteLine(Lang.GetSpecificOrDefaultString(questId, Lang.StringType.QuestionWrong));
                 continue;
             }
-            if (choices != null) 
-            {
-                if (choices.Contains(responseCast))
-                {
-                    answer = responseCast;
-                    return true;
-                }
-                Console.WriteLine(Lang.GetSpecificOrDefaultString(questId, Lang.StringType.QuestionWrong));
-            }
-            else
+            if (choices == null) 
             {
                 answer = responseCast;
                 return true;
             }
+            if (choices.Contains(responseCast))
+            {
+                answer = responseCast;
+                return true;
+            }
+            Console.WriteLine(Lang.GetSpecificOrDefaultString(questId, Lang.StringType.QuestionWrong));
         }
         Console.WriteLine(Lang.GetSpecificOrDefaultString(questId, Lang.StringType.QuestionMaxLoop));
         return false;
@@ -156,7 +147,6 @@ internal static class UiHelper
     internal static void DisplayOption(string key, string value) => Console.WriteLine($"    {key}: {Lang.GetLangString(value)}");
 
     internal static void DisplayCustomOption(string key, string value) => Console.WriteLine($"    {key}: {value}");
-    
 
     internal static void DisplayMenu(Dictionary<string, UiItem> menu, string menuId)
     {
@@ -171,6 +161,4 @@ internal static class UiHelper
         Console.WriteLine();
         menu[answer].Execute();
     }
-
-    
 }

@@ -24,12 +24,12 @@ internal class UiEditProd : UiItem
         // ask the money type to be used after displaying the options
         Console.WriteLine(Lang.GetLangString("prod_MoneyType"));
         Console.WriteLine();
-        foreach (KeyValuePair<int,Money> money in Money.MoneyTypes)
+        foreach (KeyValuePair<int,Money> money in Money.Instance.GetDictionary())
             Console.WriteLine($"    {money.Key}: {money.Value.Currency}");
         Console.WriteLine();
         if (!UiHelper.AskQuestion("prod_money", out int moneyId, currentProduct.MoneyType.Id, 
-                                  optional:true, choices:Money.MoneyTypes.Keys.ToList())) return;
-        Money moneyType = Money.MoneyTypes[moneyId];
+                                  optional:true, choices:Money.Instance.GetIds())) return;
+        Money moneyType = Money.Instance.Get(moneyId);
         
         // ask the price of the product
         if (!UiHelper.AskQuestion("prod_price", out decimal productPrice, currentProduct.ProductPrice, optional:true)) return;
@@ -37,12 +37,12 @@ internal class UiEditProd : UiItem
         // ask the type of tax that is to be used after displaying the options
         Console.WriteLine(Lang.GetLangString("prod_TaxType"));
         Console.WriteLine();
-        foreach (KeyValuePair<int,Taxes> tax in Taxes.TaxTypes)
+        foreach (KeyValuePair<int,Taxes> tax in Taxes.Instance.GetDictionary())
             Console.WriteLine($"    {tax.Key}: {tax.Value.TaxName}");
         Console.WriteLine();
         if (!UiHelper.AskQuestion("prod_taxes", out int taxesId, currentProduct.Taxes.Id, 
-                                  optional:true, choices:Taxes.TaxTypes.Keys.ToList())) return;
-        Taxes taxes = Taxes.TaxTypes[taxesId];
+                                  optional:true, choices:Taxes.Instance.GetIds())) return;
+        Taxes taxes = Taxes.Instance.Get(taxesId);
         
         // ensure that at least one field is to be updated
         if (currentProduct.ProductName == productName && currentProduct.ProductDescription == productDescription &&

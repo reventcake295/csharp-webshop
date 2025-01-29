@@ -2,7 +2,7 @@ using Store.Ui.Util;
 
 namespace Store.Ui.Cart;
 
-internal class UiCartProd : UiItem
+internal class UiCartProd : UiMenu
 {
     private readonly OrderProduct _orderProduct;
     internal UiCartProd(OrderProduct orderProduct)

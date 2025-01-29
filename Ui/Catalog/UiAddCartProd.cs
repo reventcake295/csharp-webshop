@@ -24,8 +24,8 @@ internal class UiAddCartProd : UiItem
 
         if (prodInCart)
         {
-            OrderProduct? oldProduct = ShoppingCart.Instance.GetList()
-                                                        .Find(product => product.Product == StateHolder.CurrentProduct);
+            OrderProduct? oldProduct = ShoppingCart.Instance.GetValues()
+                                                   .Find(product => product.Product == StateHolder.CurrentProduct);
             if (oldProduct != null)
             {
                 oldProduct.Count += productCount;
@@ -34,7 +34,7 @@ internal class UiAddCartProd : UiItem
             }
         }
         // Add the product as an OrderProduct to the shopping cart
-        ShoppingCart.Instance.AddProduct(StateHolder.CurrentProduct.CreateOrderProduct(productCount));
+        ShoppingCart.Instance.AddProduct(new OrderProduct(StateHolder.CurrentProduct, productCount));
         Console.WriteLine(Lang.GetLangString("cartProd_addedToCart"));
         // update the shopping cart if necessary
         // to ensure that when the user visits it again, the new product is visible

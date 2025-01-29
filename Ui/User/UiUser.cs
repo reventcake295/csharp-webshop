@@ -2,7 +2,7 @@ using Store.Ui.Util;
 
 namespace Store.Ui.User;
 
-internal class UiUser : UiItem
+internal class UiUser : UiMenu
 {
     private readonly Store.User _user;
 

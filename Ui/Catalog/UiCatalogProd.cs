@@ -2,7 +2,7 @@ using Store.Ui.Util;
 
 namespace Store.Ui.Catalog;
 
-internal class UiCatalogProd : UiItem
+internal class UiCatalogProd : UiMenu
 {
     private readonly Product _product;
     

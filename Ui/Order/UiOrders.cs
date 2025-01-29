@@ -2,7 +2,7 @@ using Store.Ui.Util;
 
 namespace Store.Ui.Order;
 
-internal class UiOrders : UiItem
+internal class UiOrders : UiMenu
 {
     /// <summary>
     /// The items that are always present in the menu,

@@ -2,7 +2,7 @@ using Store.Ui.Util;
 
 namespace Store.Ui.User;
 
-internal class UiUsers : UiItem
+internal class UiUsers : UiMenu
 {
     /// <summary>
     /// The items that are always present in the menu, but the number changes depending on what the dynamic list of items is currently
@@ -32,7 +32,7 @@ internal class UiUsers : UiItem
     {
         // clear the current items list and gather the user's list anew
         SubMenu.Clear();
-        List<Store.User> users = Users.Instance.GetAllUsers();
+        List<Store.User> users = Users.Instance.GetValues();
         // add the users to the SubMenu list
         for (int i = 0; i < users.Count; i++)
             SubMenu.Add((i + 1).ToString(), new UiUser(users[i]));

@@ -56,9 +56,9 @@ internal class UiLoginLogout : UiItem
         if (!UiHelper.AskQuestion("login_password", out string password, "", hidden: true))
             return;
         // forward the information to the User.login() method for actual processing
-        bool result = Session.Login(username, password);
+        Task<bool> result = Session.Login(username, password);
         // I know I use the _username version here and it does not matter which of the two is used here both should have the success and failure text stored
-        UiHelper.DisplayResult("login_username", result ? Lang.StringType.ResultSuccess : Lang.StringType.ResultFailure);
+        UiHelper.DisplayResult("login_username", result.Result ? Lang.StringType.ResultSuccess : Lang.StringType.ResultFailure);
     }
 
     private static void _logout()

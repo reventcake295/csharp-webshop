@@ -2,19 +2,17 @@ using Store.Ui.Util;
 
 namespace Store.Ui.Cart;
 
-internal class UiCart : UiItem
+internal class UiCart : UiMenu
 {
     /// <summary>
     /// The items that are always present in the menu but the number changes depending on what the dynamic list of items is currently
     /// </summary>
-    private readonly Dictionary<int, UiItem> _fixedItems = new();
-    
-    internal UiCart()
+    private readonly Dictionary<int, UiItem> _fixedItems = new()
     {
-        NameId = "Menu_Cart_option";
-        _fixedItems.Add(1, new UiCartOrder());
-        _fixedItems.Add(2, new UiBack());
-    }
+        {1, new UiCartOrder()},
+        {2, new UiBack()}
+    };
+    internal UiCart() => NameId = "Menu_Cart_option";
     
     internal override void Execute()
     {
@@ -46,7 +44,7 @@ internal class UiCart : UiItem
     private void LoadCart()
     {
         SubMenu.Clear();
-        List<OrderProduct> products = ShoppingCart.Instance.GetList();
+        List<OrderProduct> products = ShoppingCart.Instance.GetValues();
         for (int i = 0; i < products.Count; i++)
             SubMenu.Add((i + 1).ToString(), new UiCartProd(products[i]));
         

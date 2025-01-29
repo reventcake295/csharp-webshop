@@ -2,7 +2,7 @@ using MySqlConnector;
 
 namespace Store;
 
-internal class Products : SqlBuilder
+internal class Products : Collectible<Product>
 {
     private Products() => LoadData();
     
@@ -10,7 +10,6 @@ internal class Products : SqlBuilder
 
     internal static Products Instance => _instance ??= new Products();
     
-    private readonly List<Product> _products = [];
     protected sealed override void LoadData()
     {
         SingleStmt("SELECT product_id, name, description, price, money_id, taxes_id FROM Products;");
@@ -26,10 +25,10 @@ internal class Products : SqlBuilder
                 result.GetString("name"),
                 result.GetString("description"),
                 result.GetDecimal("price"),
-                Taxes.TaxTypes[result.GetInt32("taxes_id")],
-                Money.MoneyTypes[result.GetInt32("money_id")]
+                Taxes.Instance.Get(result.GetInt32("taxes_id")),
+                Money.Instance.Get(result.GetInt32("money_id"))
             );
-            _products.Add(product);
+            Collectibles.Add(product.ProductId, product);
         }
         CloseConnection();
     }
@@ -50,16 +49,12 @@ internal class Products : SqlBuilder
             result.GetString("name"),
             result.GetString("description"),
             result.GetDecimal("price"),
-            Taxes.TaxTypes[result.GetInt32("taxes_id")],
-            Money.MoneyTypes[result.GetInt32("money_id")]
+            Taxes.Instance.Get(result.GetInt32("taxes_id")),
+            Money.Instance.Get(result.GetInt32("money_id"))
             );
-        _products.Add(product);
+        Collectibles.Add(product.ProductId, product);
         CloseConnection();
     }
-
-    internal List<Product> GetAllProducts() => _products;
-    
-    internal Product? GetProductById(int id) => _products.Find(product => product.ProductId == id);
     
     internal bool AddProduct(string productName, string productDescription, Money moneyType, decimal productPrice, Taxes taxes)
     {
@@ -78,75 +73,15 @@ internal class Products : SqlBuilder
         int productId = result.GetInt32("product_id");
         CloseConnection();
         // create and add the product to the stored array
-        _products.Add(new Product(productId, productName, productDescription, productPrice, taxes, moneyType));
+        Collectibles.Add(productId, new Product(productId, productName, productDescription, productPrice, taxes, moneyType));
         return hasRows;
     }
 
     internal bool RemoveProduct(int productId)
     {
-        Product? product = GetProductById(productId);
-        if (product == null) return false;
+        Product product = Get(productId);
         if (!product.Delete()) return false;
-        _products.Remove(product);
+        Collectibles.Remove(productId);
         return true;
     }
-}
-
-internal class Product : SqlBuilder
-{
-    internal int ProductId { get; set; } // this may say its unused, but it is necessary for the SQlHelper Class mapper 
-    
-    internal Money MoneyType { get; private set; }
-    
-    internal Taxes Taxes { get; private set; }
-    
-    internal string ProductName { get; private set; }
-    
-    internal string ProductDescription { get; private set; }
-    
-    internal decimal ProductPrice { get; private set; }
-
-    internal Product(int productId, string productName, string productDescription, decimal productPrice, Taxes taxes, Money money)
-    {
-        ProductId = productId;
-        MoneyType = money;
-        Taxes = taxes;
-        ProductName = productName;
-        ProductDescription = productDescription;
-        ProductPrice = productPrice;
-    }
-    
-    internal bool Edit(string productName, string productDescription, Money moneyType, decimal productPrice, Taxes taxes)
-    {
-        StartStmt("UPDATE Products SET money_id=@productMoneyId, taxes_id=@productTaxesId, name=@productName, description=@productDescription, price=@productPrice WHERE product_id = @productId;");
-        AddArg("@productName", productName);
-        AddArg("@productDescription", productDescription);
-        AddArg("@productMoneyId", moneyType.Id);
-        AddArg("@productTaxesId", taxes.Id);
-        AddArg("@productPrice", productPrice);
-        AddArg("@productId", ProductId);
-        EndStmt();
-        bool result = ExecCmdAsync().Result > 0;
-        if (result)
-        {
-            ProductName = productName;
-            ProductDescription = productDescription;
-            ProductPrice = productPrice;
-            Taxes = taxes;
-            MoneyType = moneyType;
-        }
-        return result;
-    }
-    
-    internal bool Delete()
-    {
-        StartStmt("DELETE FROM Products WHERE product_id = @productId AND NOT EXISTS( SELECT order_product_id FROM orderProducts WHERE product_id = @productId);");
-        AddArg("@productId", ProductId);
-        EndStmt();
-        int result = ExecCmdAsync().Result;
-        return result > 0;
-    }
-    
-    internal OrderProduct CreateOrderProduct(int count) => new(this, count);
-
 }

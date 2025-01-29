@@ -10,12 +10,12 @@ internal class OrderProduct
     
     internal Product Product { get; private set; }
 
-    internal decimal ProductPrice { get; set; }
+    internal decimal ProductPrice { get; }
 
     internal decimal PriceTotal => Taxes.CalculateTotal(ProductPrice) * Count;
-    internal Taxes Taxes { get; set; }
+    internal Taxes Taxes { get; }
     
-    internal Money Money { get; set; }
+    internal Money Money { get; }
     
     internal OrderProduct(int orderProductId, int orderId, int count, int productId, decimal productPrice, Taxes taxes, Money money)
     {
@@ -25,7 +25,7 @@ internal class OrderProduct
         ProductPrice = productPrice;
         Taxes = taxes;
         Money = money;
-        Product? product = Products.Instance.GetProductById(productId);
+        Product? product = Products.Instance.Get(productId);
         Product = product ?? throw new NullReferenceException("Product not found");
     }
 
@@ -37,5 +37,4 @@ internal class OrderProduct
         Taxes = product.Taxes;
         Money = product.MoneyType;
     }
-    
 }
