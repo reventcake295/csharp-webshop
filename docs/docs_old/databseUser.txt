@@ -1,0 +1,10 @@
+StoreManager@localhost + '23WEsd@#12QWas!@23WEsd@#'
+
+grant delete, insert, select, update on capstoneStore.* to StoreManager@localhost;
+
+
+alter user StoreManager
+    identified by '23WEsd@#12QWas!@23WEsd@#';
+    
+    
+

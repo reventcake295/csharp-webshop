@@ -1,0 +1,52 @@
+.NET solution projects dividers
+
+Central processing:
+	.Common: Common models
+			Contains the common models for usage by the other projects in the solution
+	.Server: class Library Project that contains implementations of interfaces that are meant to be used by the Server Applications
+		.Data: Database Framework (ORM)
+				Deals with the handling of the database for the rest of the solution and allows for the conversion of the model type between entity and common and vice versa
+		.Service: Service
+				Handles the external interfaces of the Solution and allows them to access the Central processes required
+		.Run: Runnables
+				Handles the actions needed for the Solution but are not specific to one External interface and does not deal with one of the other central processes
+	
+	.Client: class Library Proejct that contains implementations of interfaces that are meant to be used by the Client Applications, also may contain a connector to the Server API for usage witht he server using endpoint /client
+	
+External interfaces:
+	.SCli: Server CLI interface
+			Handles the CLI Interface and allows the CLI to interact with the Central processes as needed
+			Dependency: Common, Server, Data, Service, Run
+	.Web: Server Web app (Razor pages / MVC)
+			Handles the website and such and all interactions required, the client js may also use the Server API endpoint /web for interactive funcionality
+			Dependency: Common, Server, Data, Service, Run
+			
+	.Api: Server API (OpenAPI)
+			Handles any API requests that come in and gives the data required as needed and allowed from the Central processes
+			Dependency: Common, Server, Data, Service, Run
+			General endpoint groups:
+				/public
+				/secure
+				/client
+				/web
+			
+	.CCli: Client User Cli interface
+			Client side application, contains .Common for the models in use and uses an API Lib for creation and conversion of the .Common models
+			Dependency: Common, Client
+	
+
+Store Solution Projects
+Internal:
+.Data
+.Run
+.Service
+
+
+External
+.SCli
+.Web
+
+
+
+
+
