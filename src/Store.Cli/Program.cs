@@ -13,7 +13,9 @@ public class Program
         App.AddAppLayer(new DataLayer());
         App.AddAppLayer(new ServerCliLayer());
         
-        App.LoadApp(args);
+        HostApplicationBuilder builder = (HostApplicationBuilder)App.LoadApp(new HostApplicationBuilder(), args);
+        IHost host = builder.Build();
+        App.PostLoad(host);
         
         new Ui().Run();
         

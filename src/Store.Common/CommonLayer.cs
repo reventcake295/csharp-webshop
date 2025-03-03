@@ -9,15 +9,17 @@ namespace Store.Common;
 
 public class CommonLayer : IAppLayer
 {
-    public override void Load(string[] args, IHostBuilder host)
+    public override IHostApplicationBuilder Load(string[] args, IHostApplicationBuilder host)
     {
-        host.ConfigureServices(collection => collection.AddScoped<OrderFactory>());
+        host.Services.AddScoped<OrderFactory>();
+        return host;
     }
 
-    public override void PostLoad(string[] args, IHost host)
+    public override IHost PostLoad(IHost host)
     {
         // start seeding the database, should be possible now
         Initialize(host.Services.GetRequiredService<IDataWorker>());
+        return host;
     }
     
     private static void Initialize(IDataWorker context)

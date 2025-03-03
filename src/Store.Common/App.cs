@@ -1,7 +1,5 @@
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Store.Common.Enums;
 using Store.Common.Interfaces;
 using Store.Common.Model;
 
@@ -29,25 +27,29 @@ public static class App
         _AppLayers.Add(appLayer);
     }
 
-    public static void LoadApp(string[] args)
+    public static IHostApplicationBuilder LoadApp(IHostApplicationBuilder builder, string[] args)
     {
         if (AppRunning) throw new InvalidOperationException("App already running");
-        IHostBuilder hostBuilder = Host.CreateDefaultBuilder(args);
         
         foreach (IAppLayer appLayer in _AppLayers)
-            appLayer.PreLoad(args, hostBuilder);
+            builder = appLayer.PreLoad(args, builder);
         
         foreach (IAppLayer appLayer in _AppLayers)
-            appLayer.Load(args, hostBuilder);
+            builder = appLayer.Load(args, builder);
         
-        AppHost = hostBuilder.Build();
-        
+        return builder;
+    }
+
+    public static void PostLoad(IHost host)
+    {
+        if (AppRunning) throw new InvalidOperationException("App already running");
         foreach (IAppLayer appLayer in _AppLayers)
-            appLayer.PostLoad(args, AppHost);
+            host = appLayer.PostLoad(host);
+        
+        AppHost = host;
         
         AppRunning = true;
     }
-    
     
     public static void UnloadApp()
     {
